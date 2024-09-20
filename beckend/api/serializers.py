@@ -41,7 +41,7 @@ class ListBikeSerializer(serializers.ModelSerializer):
     brand = BrandSerializer()
     flag = FlagSerializer()
     color = ColorSerializer()
-    Frame_material = FrameMaterialSerializer()
+    frame_material = FrameMaterialSerializer()
     class Meta:
         model = Bike
         fields = '__all__'
