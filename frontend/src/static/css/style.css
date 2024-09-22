@@ -1,0 +1,364 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+
+:root {
+    /* color */
+    --white: rgb(255, 255, 255);
+    --black: rgb(0, 0, 0);
+    --orange: rgb(245, 117, 32);
+
+    /* font family */
+    --Inter: "Inter", sans-serif;
+}
+
+
+.container {
+
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1215px;
+}
+
+.header {
+    width: 100%;
+
+    background: rgb(16, 16, 16);
+
+    .container {
+
+        .header_items {
+            position: relative;
+
+            padding: 30px 1rem;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            width: 100%;
+            /* overflow: hidden; */
+
+            .logo {
+                /* flex: 1; */
+            }
+
+            .blok_access {
+                display: flex;
+                align-items: center;
+                gap: 2.5rem;
+
+                .menu {
+
+                    ul {
+                        list-style: none;
+
+                        display: flex;
+                        gap: 2.2rem;
+
+                        color: var(--white);
+                        font-family: var(--Inter);
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: 160%;
+                        letter-spacing: 0%;
+                        text-align: left;
+                        text-transform: uppercase;
+
+                        transition: all .8s ease;
+
+                        cursor: pointer;
+
+                        li.active {
+                            color: var(--orange);
+                        }
+                    }
+                }
+
+                .access {
+                    display: flex;
+                    align-items: center;
+                    gap: 1.8rem;
+
+                    ul {
+                        position: relative;
+
+                        list-style: none;
+
+                        display: flex;
+                        align-items: center;
+                        gap: 24px;
+
+                        li {
+                            cursor: pointer;
+                        }
+
+                        li.search {
+                            position: relative;
+                        }
+
+                        .blok_search {
+
+                            position: absolute;
+                            top: 50px;
+                            right: 125px;
+
+                            transition: all .6s ease;
+
+                            form {
+                                position: relative;
+
+                                input {
+                                    outline: none;
+                                    padding: 10px 16px;
+
+                                    color: var(--white);
+
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    line-height: 17px;
+                                    letter-spacing: 0%;
+                                    text-align: left;
+
+                                    border: 1px solid rgb(76, 76, 76);
+                                    border-radius: 5px;
+                                    background: rgb(16, 16, 16);
+
+                                    &::placeholder {
+                                        color: rgb(119, 119, 119);
+                                    }
+                                }
+
+                                button[type='submit'] {
+
+                                    cursor: pointer;
+                                    position: absolute;
+                                    top: 10px;
+                                    right: 16px;
+
+                                    background-color: rgba(0, 0, 0, 0);
+                                    border: none;
+
+                                    img {}
+                                }
+
+
+                            }
+                        }
+
+                        .display_none {
+
+                            position: absolute;
+                            top: 50px;
+                            right: 0px;
+
+                            transform: scale(0);
+                            transition: all .3s ease;
+
+                            form {
+                                position: relative;
+
+                                input {
+                                    outline: none;
+                                    padding: 10px 16px;
+
+                                    color: var(--white);
+
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    line-height: 17px;
+                                    letter-spacing: 0%;
+                                    text-align: left;
+
+                                    border: 1px solid rgb(76, 76, 76);
+                                    border-radius: 5px;
+                                    background: rgb(16, 16, 16);
+
+                                    &::placeholder {
+                                        color: rgb(119, 119, 119);
+                                    }
+                                }
+
+                                button[type='submit'] {
+
+                                    cursor: pointer;
+                                    position: absolute;
+                                    top: 10px;
+                                    right: 16px;
+
+                                    background-color: rgba(0, 0, 0, 0);
+                                    border: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .menu_blok {
+
+                position: fixed;
+                top: 0px;
+                right: 0px;
+
+                width: 100%;
+                height: 100vh;
+
+                background-color: rgba(0, 0, 0, 0.4);
+
+                transition: all .3s ease;
+
+                .blok_user {
+                    position: absolute;
+                    right: 0px;
+
+                    width: 448px;
+                    height: 100vh;
+
+                    background-color: var(--white);
+
+                    padding: 104px 60px 0px 40px;
+
+                    .blok_close {
+                        position: absolute;
+                        top: 40px;
+                        right: 40px;
+
+                        cursor: pointer;
+                    }
+
+                    h4 {
+                        color: var(--black);
+                        font-family: var(--Inter);
+                        font-size: 40px;
+                        font-weight: 400;
+                        line-height: 123%;
+                        letter-spacing: 5%;
+                        text-align: left;
+                    }
+
+                    .blok_link {
+                        border-radius: 10px;
+                        background: rgb(248, 248, 248);
+
+                        .blok_link_ul {
+
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+
+            .menu_blok_none {
+
+
+                position: fixed;
+                top: 0px;
+                right: 0px;
+
+                width: 100%;
+                height: 100vh;
+
+                transition: all .3s ease-in-out;
+
+                transform: translate(1000%, 0);
+
+                background-color: rgba(0, 0, 0, 0.4);
+
+                .blok_user {
+                    position: absolute;
+                    right: 0px;
+                    transform: scale(0);
+                    width: 448px;
+                    height: 100vh;
+
+                    background-color: var(--white);
+
+                    padding: 104px 60px 0px 40px;
+
+                    .blok_close {
+                        position: absolute;
+                        top: 40px;
+                        right: 40px;
+                    }
+
+                    h4 {
+                        color: var(--black);
+                        font-family: var(--Inter);
+                        font-size: 40px;
+                        font-weight: 400;
+                        line-height: 123%;
+                        letter-spacing: 5%;
+                        text-align: left;
+                    }
+
+                    .blok_link {
+                        border-radius: 10px;
+                        background: rgb(248, 248, 248);
+
+                        .blok_link_ul {
+
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+
+
+.MuiCollapse-wrapperInner {
+
+    background-color: #fff;
+}
+
+@media screen and (max-width:920px) {
+    .header {
+
+        .container {
+
+            .header_items {
+
+                .logo {}
+
+                .blok_access {
+
+                    .menu {
+
+                        display: none;
+
+                    }
+
+                    .access {
+
+                        li {
+                            cursor: pointer;
+                        }
+
+                        li.search {
+                            position: relative;
+
+                        }
+
+                        .blok_search {
+                            right: auto !important;
+                        }
+
+                        .display_none {
+
+                            right: auto !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
