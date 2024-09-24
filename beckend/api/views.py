@@ -29,7 +29,7 @@ class ListCreateBikeApiView(GenericAPIView):
         OrderingFilter
     ]
     search_fields = ['name', 'description',]
-    ordering = ['name', 'price', 'created_at']
+    ordering = ['-price','price']
     filterset_class = BikeFilter
     pagination_class = SimplePagintion
     permission_classes = (IsAuthenticatedOrReadOnly,)
