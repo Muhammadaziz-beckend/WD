@@ -69,22 +69,34 @@ class ListCreateBikeApiView(GenericAPIView):
 
         kwargs.setdefault('context', self.get_serializer_context())
         return serializer(*args, **kwargs)
+class DetailUpdateDestroyBikeApiView(RetrieveUpdateDestroyAPIView):
+    queryset = Bike.objects.all()
+    serializer_class = DetailBikeSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def get(self, request, *args, **kwargs):
+        bikes = self.filter_queryset(self.get_queryset())
+        bikes = self.paginate_queryset(bikes)
+        serializer = self.get_serializer(bikes, many=True)
+        return self.get_paginated_response(serializer.data)
 
-@api_view(['GET', 'PATCH', 'DELETE'])
-@permission_classes_d([IsAuthenticatedOrReadOnly | IsSuperUser])
-def detail_update_product(request, id):
-    bike = get_object_or_404(Bike, id=id)
-    if request.method == 'PATCH':
-        serializer = BikeSerializer(instance=bike, data=request.data, partial=True)
+    def get_object(self):
+        return get_object_or_404(Bike, id=self.kwargs.get('id'))
+
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return BikeSerializer
+        return super().get_serializer_class()
+
+    def patch(self, request, *args, **kwargs):
+        bike = self.get_object()
+        serializer = self.get_serializer(instance=bike, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        product = serializer.save()
+        bike = serializer.save()
         read_serializer = DetailBikeSerializer(instance=bike, context={'request': request})
         return Response(read_serializer.data)
 
-    if request.method == 'DELETE':
-        product.delete()
+    def delete(self, request, *args, **kwargs):
+        bike = self.get_object()
+        bike.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    serializer = DetailBikeSerializer(instance=bike, context={'request': request})
-    return Response(serializer.data)

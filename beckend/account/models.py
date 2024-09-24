@@ -29,7 +29,6 @@ class User(AbstractUser):
     phone = PhoneNumberField('номер телефона', unique=True)
     email = models.EmailField('электронная почта', blank=True, unique=True)
     role = models.CharField('роль', choices=ROLE, default=CLIENT, max_length=15)
-
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

@@ -37,12 +37,14 @@ class LoginApiViews(GenericAPIView):
         serializer_class = self.get_serializer_class()
         kwargs.setdefault("context", self.get_serializer_context())
         return serializer_class[index](*args, **kwargs)
-@api_view(['POST'])
-def register_api(request):
-    serializer = RegisterSerializer(data=request.data)
-    if serializer.is_valid():
-        user = serializer.save()
-        return Response({
-            'detail': 'Пользователь успешно зарегистрирован',
-        }, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class RegisterApiView(GenericAPIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                'detail': 'Пользователь успешно зарегистрирован',
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
