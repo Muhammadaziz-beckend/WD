@@ -72,13 +72,12 @@ class ListCreateBikeApiView(GenericAPIView):
 class DetailUpdateDestroyBikeApiView(RetrieveUpdateDestroyAPIView):
     queryset = Bike.objects.all()
     serializer_class = DetailBikeSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly | IsSuperUser]
 
     def get(self, request, *args, **kwargs):
-        bikes = self.filter_queryset(self.get_queryset())
-        bikes = self.paginate_queryset(bikes)
-        serializer = self.get_serializer(bikes, many=True)
-        return self.get_paginated_response(serializer.data)
+        bike = self.get_object()  # Get the specific bike object
+        serializer = self.get_serializer(bike)  # Serialize the bike object
+        return Response(serializer.data) 
 
     def get_object(self):
         return get_object_or_404(Bike, id=self.kwargs.get('id'))
