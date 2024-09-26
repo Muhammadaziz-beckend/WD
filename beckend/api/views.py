@@ -6,8 +6,9 @@ from rest_framework.decorators import api_view, permission_classes as permission
 from api.auth.permissions import IsSuperUser
 from api.filters import BikeFilter
 from api.paginations import SimplePagintion
-from api.serializers import DetailBikeSerializer, ListBikeSerializer, BikeSerializer
-from bike.models import Bike
+from api.serializers import CategorySerializer, DetailBikeSerializer, ListBikeSerializer, BikeSerializer
+from api.permissions import IsAdminOrReadOnly
+from bike.models import Bike, Category
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404, GenericAPIView
 from rest_framework import status
@@ -15,6 +16,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
 
 class ListCreateBikeApiView(GenericAPIView):
 
@@ -99,3 +101,14 @@ class DetailUpdateDestroyBikeApiView(RetrieveUpdateDestroyAPIView):
         bike = self.get_object()
         bike.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CategoryViewSet(ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'id'
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering = ["name"]
+    pagination_class = SimplePagintion
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly)
