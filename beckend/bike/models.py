@@ -76,7 +76,7 @@ class Bike(models.Model):
     name = models.CharField('название', max_length=100)
     created_at = models.DateTimeField('дата добавление', auto_now_add=True)
     updated_at = models.DateTimeField('дата изменения', auto_now=True)
-    Frame_material = models.ForeignKey('bike.FrameMaterial', models.PROTECT, verbose_name='Материал рам',help_text='Выберите Материал рамы')
+    frame_material = models.ForeignKey('bike.FrameMaterial', models.PROTECT, verbose_name='Материал рам',help_text='Выберите Материал рамы')
     description = models.CharField('описание', max_length=400, help_text='Просто описание')
     category = models.ForeignKey('bike.Category', models.PROTECT, verbose_name='категория',help_text='Выберите категорию')
     brand  = models.ForeignKey('bike.Brand', models.PROTECT, verbose_name='бренд',help_text='Выберите бренд')

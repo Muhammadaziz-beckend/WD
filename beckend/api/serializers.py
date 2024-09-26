@@ -50,7 +50,7 @@ class ListBikeSerializer(serializers.ModelSerializer):
 class DetailBikeSerializer(serializers.ModelSerializer):
 
     category = CategorySerializer()
-    Frame_material = FrameMaterialSerializer()
+    frame_material = FrameMaterialSerializer()
     brand = BrandSerializer()
     color = ColorSerializer()
     class Meta:

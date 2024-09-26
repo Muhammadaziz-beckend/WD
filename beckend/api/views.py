@@ -32,7 +32,7 @@ class ListCreateBikeApiView(GenericAPIView):
     ordering = ['-price','price']
     filterset_class = BikeFilter
     pagination_class = SimplePagintion
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request, *args, **kwargs):
         bikes = self.filter_queryset(self.get_queryset())
