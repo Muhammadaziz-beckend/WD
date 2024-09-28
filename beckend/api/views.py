@@ -8,7 +8,7 @@ from api.filters import BikeFilter
 from api.paginations import SimplePagintion
 from api.serializers import CategorySerializer, DetailBikeSerializer, ListBikeSerializer, BikeSerializer
 from api.permissions import IsAdminOrReadOnly
-from api.mixins import UltraGenericAPIView
+from api.mixins import UltraGenericAPIView, UltraModelMixin
 from bike.models import Bike, Category
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404, GenericAPIView
@@ -37,7 +37,28 @@ class ListCreateBikeApiView(UltraGenericAPIView):
     filterset_class = BikeFilter
     pagination_class = SimplePagintion
     permission_classes = [IsAuthenticatedOrReadOnly]
+    def get_serializer_class(self):
+        
+        assert self.serializer_classes is not None, (
+                "'%s' should either include a `serializer_classes` attribute, "
+                "or override the `get_serializer_class()` method."
+                % self.__class__.__name__
+        )
 
+        method = self.request.method.lower()
+        return self.serializer_classes[method]
+
+    def get_read_serializer(self, *args, **kwargs):
+        assert self.serializer_classes.get('get') is not None, (
+                "'%s' should either include a serializer class for get method,"
+                "if want to use read serializer, please set serializer class for get method"
+                "or override the `get_serializer_class()` method."
+                % self.__class__.__name__
+        )
+        serializer = self.serializer_classes.get('get')
+
+        kwargs.setdefault('context', self.get_serializer_context())
+        return serializer(*args, **kwargs)
     def get(self, request, *args, **kwargs):
         bikes = self.filter_queryset(self.get_queryset())
         bikes = self.paginate_queryset(bikes)
@@ -53,7 +74,11 @@ class ListCreateBikeApiView(UltraGenericAPIView):
 
 class DetailUpdateDestroyBikeApiView(ListModelMixin, DestroyModelMixin, UltraGenericAPIView):
     queryset = Bike.objects.all()
-    serializer_class = DetailBikeSerializer
+    serializer_classes = {
+        'get': DetailBikeSerializer,
+        'patch': BikeSerializer,
+        'delete': DetailBikeSerializer,  
+    }
     permission_classes = [IsAuthenticatedOrReadOnly | IsSuperUser]
 
     def get(self, request, *args, **kwargs):
@@ -99,7 +124,7 @@ class DetailUpdateDestroyBikeApiView(ListModelMixin, DestroyModelMixin, UltraGen
 #         return BikeSerializer
 
 
-class CategoryViewSet(ModelViewSet):
+class CategoryViewSet(UltraModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'id'
