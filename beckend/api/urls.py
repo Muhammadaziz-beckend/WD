@@ -14,3 +14,19 @@ urlpatterns = [
 ]
 
 urlpatterns += url_doc
+
+# from django.urls import path, include
+# from rest_framework.routers import DefaultRouter
+# from .yasg import urlpatterns as url_doc
+# from .views import BikeViewSet, CategoryViewSet
+
+# router = DefaultRouter()
+# router.register('categories', CategoryViewSet)
+# router.register('products', BikeViewSet, basename='bike')
+
+# urlpatterns = [
+#     path('auth/', include('api.auth.urls')),
+#     path('', include(router.urls)),
+# ]
+
+# urlpatterns += url_doc

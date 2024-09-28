@@ -82,6 +82,22 @@ class DetailUpdateDestroyBikeApiView(ListModelMixin, DestroyModelMixin, UltraGen
         bike.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# class BikeViewSet(ModelViewSet):
+#     queryset = Bike.objects.all()
+#     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+#     search_fields = ['name', 'description']
+#     ordering = ['-price', 'price']
+#     filterset_class = BikeFilter
+#     pagination_class = SimplePagintion
+#     permission_classes = [IsAuthenticatedOrReadOnly | IsSuperUser]
+
+#     def get_serializer_class(self):
+#         if self.action == 'list':
+#             return ListBikeSerializer
+#         elif self.action in ['retrieve', 'update', 'partial_update']:
+#             return DetailBikeSerializer
+#         return BikeSerializer
+
 
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
