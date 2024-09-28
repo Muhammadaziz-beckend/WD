@@ -5,6 +5,7 @@ class SerializerByMethodMixin:
     serializer_classes = {}
 
     def get_serializer_class(self):
+        
         assert self.serializer_classes is not None, (
                 "'%s' should either include a `serializer_classes` attribute, "
                 "or override the `get_serializer_class()` method."

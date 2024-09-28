@@ -8,6 +8,7 @@ from api.filters import BikeFilter
 from api.paginations import SimplePagintion
 from api.serializers import CategorySerializer, DetailBikeSerializer, ListBikeSerializer, BikeSerializer
 from api.permissions import IsAdminOrReadOnly
+from api.mixins import UltraGenericAPIView
 from bike.models import Bike, Category
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404, GenericAPIView
@@ -17,8 +18,9 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.mixins import (ListModelMixin, DestroyModelMixin)
 
-class ListCreateBikeApiView(GenericAPIView):
+class ListCreateBikeApiView(UltraGenericAPIView):
 
     queryset = Bike.objects.all()
     serializer_classes = {
@@ -49,36 +51,14 @@ class ListCreateBikeApiView(GenericAPIView):
         read_serializer = self.get_read_serializer(product)
         return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
-    def get_serializer_class(self):
-
-        assert self.serializer_classes is not None, (
-                "'%s' should either include a `serializer_classes` attribute, "
-                "or override the `get_serializer_class()` method."
-                % self.__class__.__name__
-        )
-
-        method = self.request.method.lower()
-        return self.serializer_classes[method]
-
-    def get_read_serializer(self, *args, **kwargs):
-        assert self.serializer_classes.get('get') is not None, (
-                "'%s' should either include a serializer class for get method,"
-                "if want to use read serializer, please set serializer class for get method"
-                "or override the `get_serializer_class()` method."
-                % self.__class__.__name__
-        )
-        serializer = self.serializer_classes.get('get')
-
-        kwargs.setdefault('context', self.get_serializer_context())
-        return serializer(*args, **kwargs)
-class DetailUpdateDestroyBikeApiView(RetrieveUpdateDestroyAPIView):
+class DetailUpdateDestroyBikeApiView(ListModelMixin, DestroyModelMixin, UltraGenericAPIView):
     queryset = Bike.objects.all()
     serializer_class = DetailBikeSerializer
     permission_classes = [IsAuthenticatedOrReadOnly | IsSuperUser]
 
     def get(self, request, *args, **kwargs):
-        bike = self.get_object()  # Get the specific bike object
-        serializer = self.get_serializer(bike)  # Serialize the bike object
+        bike = self.get_object()  
+        serializer = self.get_serializer(bike)  
         return Response(serializer.data) 
 
     def get_object(self):
