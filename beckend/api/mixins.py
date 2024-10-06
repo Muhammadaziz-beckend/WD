@@ -83,39 +83,6 @@ class DestrouPage:
         return Response(serializer.data)
     
 
-class SerializersByAction:
-    serializer_classes = {}
-
-    def get_serializer_class(self):
-        if self.action == 'partial_update' or self.action == 'update_partial':
-            return self.serializer_classes.get('update', self.serializer_class)
-        return self.serializer_classes.get(self.action, self.serializer_class)
-
-
-class PermissionByAction:
-    permission_classes_by_action = {}
-
-    def get_permissions(self):
-        permission_classes = self.permission_classes_by_action.get(self.action, None)
-        if self.action == 'partial_update' or self.action == 'update_partial':
-            permission_classes = self.permission_classes_by_action.get('update', None)
-        if permission_classes is None:
-            permission_classes = self.permission_classes
-
-        return [permission() for permission in permission_classes]
-
-
-class PermissionByMethod:
-    permission_classes_by_method = {}
-
-    def get_permissions(self):
-        method = self.request.method.lower()
-        permission_classes = self.permission_classes_by_method.get(method, None)
-        if permission_classes is None:
-            permission_classes = self.permission_classes
-        return [permission() for permission in permission_classes]
-
-
 
 class UltraModelMixin(MultipleDestroyMixin,DestrouPage,ModelViewSet):
     pass
