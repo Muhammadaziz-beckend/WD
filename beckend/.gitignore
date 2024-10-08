@@ -1,1 +1,18 @@
+# Настройки среды разработки
+.vscode/
+.idea/
+
+# Python virtual environments
+env/
 venv/
+
+# Compiled python files
+*.py[cod]
+*.so
+*.egg-info/
+
+# Django migrations
+# migrations/
+
+# Логи
+*.log
