@@ -5,6 +5,9 @@ from .yasg import urlpatterns as url_doc
 
 router = DefaultRouter()
 router.register('categories', views.CategoryViewSet)
+router.register('color', views.ColorViewSet)
+router.register('brand', views.BrandViewSet)
+# 
 
 urlpatterns = [
     path('products/', views.ListCreateBikeApiView.as_view(), name='bike-list-create'),

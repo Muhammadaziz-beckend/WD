@@ -6,10 +6,10 @@ from rest_framework.decorators import api_view, permission_classes as permission
 from api.auth.permissions import IsSuperUser
 from api.filters import BikeFilter
 from api.paginations import SimplePagintion
-from api.serializers import CategorySerializer, DetailBikeSerializer, ListBikeSerializer, BikeSerializer
+from api.serializers import BrandSerializer, CategorySerializer, ColorSerializer, DetailBikeSerializer, ListBikeSerializer, BikeSerializer
 from api.permissions import IsAdminOrReadOnly
 from api.mixins import UltraGenericAPIView, UltraModelMixin
-from bike.models import Bike, Category
+from bike.models import Bike, Brand, Category, Color
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404, GenericAPIView
 from rest_framework import status
@@ -131,5 +131,26 @@ class CategoryViewSet(UltraModelMixin):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
     ordering = ["name"]
-    pagination_class = SimplePagintion
+    # pagination_class = SimplePagintion
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly)
+
+
+# m
+class ColorViewSet(UltraModelMixin):
+    queryset = Color.objects.all()
+    serializer_class = ColorSerializer
+    lookup_field = 'id'
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering = ["name"]
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly)
+
+
+class BrandViewSet(UltraModelMixin):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+    lookup_field = 'id'
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    ordering = ["name"]
     permission_classes = (IsAuthenticatedOrReadOnly, IsAdminOrReadOnly)
