@@ -7,6 +7,9 @@ router = DefaultRouter()
 router.register('categories', views.CategoryViewSet)
 router.register('color', views.ColorViewSet)
 router.register('brand', views.BrandViewSet)
+router.register('frame_material', views.FrameMaterialViewSet)
+router.register('flag', views.FlagViewSet)
+router.register('size', views.SizeViewSet)
 # 
 
 urlpatterns = [
