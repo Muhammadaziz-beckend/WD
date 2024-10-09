@@ -499,6 +499,8 @@ a {
         .main_items {
 
             display: flex;
+            gap: 40px;
+
             padding: 48px 25px;
 
             .aside {
@@ -599,6 +601,19 @@ a {
 
                                 input[type='radio'] {
                                     display: none;
+
+                                    &:checked+.feckRadio {
+                                        border: none;
+                                        border-radius: 4px;
+                                        background: rgb(245, 117, 32);
+
+                                        &::before {
+                                            content: '✓';
+                                            color: rgb(255, 255, 255);
+                                            font-size: 24px;
+                                            font-family: var(--Inter);
+                                        }
+                                    }
                                 }
 
                                 .feckRadio {
@@ -615,19 +630,6 @@ a {
                                     justify-content: center;
 
                                     cursor: pointer;
-
-                                    &.active {
-                                        border: none;
-                                        border-radius: 4px;
-                                        background: rgb(245, 117, 32);
-
-                                        &::before {
-                                            content: '✓';
-                                            color: rgb(255, 255, 255);
-                                            font-size: 24px;
-                                            font-family: var(--Inter);
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -728,6 +730,110 @@ a {
                                 }
                             }
                         }
+
+                        .blok_multiple {
+                            margin-top: 24px;
+
+                            width: 257px;
+
+                            display: flex;
+                            align-items: center;
+                            flex-wrap: wrap;
+                            flex-direction: row;
+                            gap: 13px;
+
+                            label {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+
+                                .fake {
+                                    width: 32px;
+                                    height: 32px;
+                                    border-radius: 50%;
+                                    transition: border 0.3s ease;
+                                }
+
+                                input[type='radio'] {
+                                    display: none;
+
+                                    &[type='radio']:checked+div.fake {
+                                        border: 5px solid #ffffffab;
+                                    }
+                                }
+                            }
+                        }
+
+                        .group_button_form {
+                            margin-top: 25px;
+
+                            width: 100%;
+
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+
+                            .button {
+                                padding: 16px 10px;
+
+                                cursor: pointer;
+
+                                background-color: #fff;
+                                border: 1px solid rgb(229, 229, 229);
+                                border-radius: 10px;
+
+
+                                color: rgb(16, 16, 16);
+                                font-family: var(--Inter);
+                                font-size: 16px;
+                                font-weight: 500;
+                                line-height: 123%;
+
+                                &:hover {
+                                    color: #fff;
+
+                                    border-radius: 10px;
+                                    background: rgb(16, 16, 16);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .product {
+                padding: 48px 25px;
+
+                .container_product {
+
+                    .product_items {
+
+                        .hed_product {
+                            select {
+                                padding: 20px 16px;
+
+                                outline: none;
+
+                                background-color: #fff;
+                                border: 1px solid rgb(229, 229, 229);
+                                border-radius: 10px;
+
+                                appearance: none;
+                                -moz-appearance: none;
+
+                                color: rgb(119, 119, 119);
+                                font-family: var(--Inter);
+                                font-size: 16px;
+                                font-weight: 500;
+                                line-height: 123%;
+                                letter-spacing: 0%;
+                                text-align: left;
+
+                            }
+
+                        }
+
+                        .product_blok_items {}
                     }
                 }
             }

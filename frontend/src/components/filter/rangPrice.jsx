@@ -8,15 +8,15 @@ function valuetext(value) {
 }
 
 const RangPrice = ({priseStart,priseEnd}) => {
-    const [value, setValue] = React.useState([20, 100]); // Начальные значения цен
+    const [value, setValue] = React.useState([20, 1137900]); // Начальные значения цен
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     useEffect(() => {
-        priseStart(`${value[0]} c`)
-        priseEnd(`${value[1]} c`)
+        priseStart(value[0])
+        priseEnd(value[1])
     },[value])
 
     return (

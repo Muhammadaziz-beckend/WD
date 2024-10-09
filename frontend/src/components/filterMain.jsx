@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RangPrice from "./filter/rangPrice";
+import Get from "../request/get";
 
 
 const FilterMain = () => {
@@ -16,8 +17,21 @@ const FilterMain = () => {
         setSelectedCat(category);
     };
 
-    const [priceFrom, setPriceFrom] = useState('')
-    const [priceTo, setPriceTo] = useState('')
+    const [priceFrom, setPriceFrom] = useState(null)
+    const [priceTo, setPriceTo] = useState(null)
+
+    // fetch
+    const [colorDate, setColorDate] = useState([])
+    const [brandDate, setBrandDate] = useState([])
+    const [categoriesDate, setCategoriesDate] = useState([])
+
+    useEffect(() => {
+        Get('http://127.0.0.1:8000/api/v1/color/').then(r => setColorDate(r.data))
+        Get('http://127.0.0.1:8000/api/v1/brand/').then(r => setBrandDate(r.data))
+        Get('http://127.0.0.1:8000/api/v1/categories/').then(r => setCategoriesDate(r.data))
+        // 
+    }, [])
+
 
     return (
         <aside className="aside">
@@ -42,28 +56,19 @@ const FilterMain = () => {
                         <h3>Категории товара</h3>
 
                         <div className="group_cat">
-                            <label className="radioInput">
-                                <input
-                                    type="radio"
-                                    name="cat"
-                                    id="triathlonBikes"
-                                    checked={selectedCat === 'triathlonBikes'}
-                                    onChange={() => handleSelect('triathlonBikes')}
-                                />
-                                <div className={`feckRadio ${selectedCat === 'triathlonBikes' ? 'active' : ''}`}></div>
-                                <p>Велосипеды для триатлона</p>
-                            </label>
-                            <label className="radioInput">
-                                <input
-                                    type="radio"
-                                    name="cat"
-                                    id="mountainBikes"
-                                    checked={selectedCat === 'mountainBikes'}
-                                    onChange={() => handleSelect('mountainBikes')}
-                                />
-                                <div className={`feckRadio ${selectedCat === 'mountainBikes' ? 'active' : ''}`}></div>
-                                <p>Горные велосипеды</p>
-                            </label>
+
+                            {categoriesDate?.map(item => (
+                                <label className="radioInput">
+                                    <input
+                                        type="radio"
+                                        name="categories"
+                                        value={item?.id}
+                                    />
+                                    <div className={`feckRadio`}></div>
+                                    <p>{item?.name}</p>
+                                </label>
+                            ))}
+
                         </div>
                     </div>
 
@@ -75,9 +80,9 @@ const FilterMain = () => {
                                 <RangPrice priseStart={setPriceFrom} priseEnd={setPriceTo} />
                             </div>
                             <div className="bottom">
-                                <input type="text" name="price_from" value={priceFrom} id="" disabled />
+                                <input type="text" name="price_from" value={priceFrom} />
                                 <span>-</span>
-                                <input type="text" name="price_to" id="" value={priceTo} disabled />
+                                <input type="text" name="price_to" value={priceTo} />
                             </div>
                         </div>
                     </div>
@@ -87,18 +92,12 @@ const FilterMain = () => {
 
                         <div className="blok_checkbox_multiple">
 
-                            <label className="blokInputCh" >
-                                <input type="checkbox" name="brands" id="" />
+                            {brandDate?.map(item => (<label className="blokInputCh" >
+                                <input type="checkbox" name="brands" value={item?.id} />
                                 <div className="fake"></div>
-                                <p>BMW</p>
-                            </label>
+                                <p>{item?.name}</p>
+                            </label>))}
 
-                            <label className="blokInputCh">
-                                <input type="checkbox" name="brands" id="" />
-                                <div className="fake"></div>
-                                <p>BMW</p>
-                            </label>
-                            
                         </div>
                     </div>
 
@@ -106,11 +105,19 @@ const FilterMain = () => {
                         <h3>Цвет</h3>
 
                         <div className="blok_multiple">
-                            <label htmlFor="">
-                                <div className="fake" style={{background:'indigo'}}></div>
-                                <input type="checkbox" name="" id="" />
-                            </label>
+                            {colorDate?.map(item =>
+                            (<label>
+                                <input type="radio" name="color" value={item?.id} />
+                                <div className="fake" style={{ background: `${item?.name}` }}></div>
+                            </label>)
+                            )}
                         </div>
+                    </div>
+
+                    <div className="group_button_form">
+
+                        <button type="submit" className="button button1">Фильтровать</button>
+                        <button type="reset" className="button">Сбросить фильтры</button>
                     </div>
                 </form>
             </div>
