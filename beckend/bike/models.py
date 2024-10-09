@@ -68,7 +68,6 @@ class Bike(models.Model):
 
     RECEIVE_TYPE = (
         (IN_STOCK, 'в наличии'),
-        (SOLD_OUT, 'распродано')
     )
     class Meta:
         verbose_name = 'велосипед'
