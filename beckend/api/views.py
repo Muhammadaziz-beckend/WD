@@ -2,7 +2,7 @@ from pprint import pprint
 from django.db.models import Q
 from django.core.paginator import Paginator
 from rest_framework.decorators import api_view, permission_classes as permission_classes_d, parser_classes, authentication_classes
-
+from .clone import clone_bike
 from api.auth.permissions import IsSuperUser
 from api.filters import BikeFilter
 from api.paginations import SimplePagintion
@@ -62,6 +62,9 @@ class ListCreateBikeApiView(UltraGenericAPIView):
     def get(self, request, *args, **kwargs):
         bikes = self.filter_queryset(self.get_queryset())
         bikes = self.paginate_queryset(bikes)
+
+        # clone_bike(50)
+
         serializer = self.get_serializer(bikes, many=True)
         return self.get_paginated_response(serializer.data)
 
