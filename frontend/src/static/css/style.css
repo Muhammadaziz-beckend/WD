@@ -12,11 +12,14 @@
     --white: rgb(255, 255, 255);
     --black: rgb(0, 0, 0);
     --orange: rgb(245, 117, 32);
-
     /* font family */
     --Inter: "Inter", sans-serif;
 }
 
+
+body {
+    background-color: var(--white);
+}
 
 .container {
 
@@ -833,7 +836,179 @@ a {
 
                         }
 
-                        .product_blok_items {}
+                        .product_blok_items {
+
+                            margin-top: 16px;
+
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            grid-gap: 20px;
+                            padding: 20px;
+
+                            transition: all .5s ease;
+
+                            .product_blok_item {
+
+                                transition: all .5s ease;
+
+                                position: relative;
+
+                                display: flex;
+                                flex-direction: column;
+
+                                padding: 10px;
+                                text-align: center;
+
+                                max-width: 300px;
+                                min-width: 290px;
+
+                                padding: 16px 19px 22px;
+
+                                .top {
+
+                                    position: relative;
+
+                                    .flag {
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 0px;
+
+                                        width: 72px;
+                                        height: 38px;
+
+                                        border-radius: 0px 0px 10px 0px;
+                                    }
+
+                                    .info_product {
+                                        position: absolute;
+                                        top: 0px;
+                                        right: 0px;
+
+                                        color: rgb(77, 147, 44);
+                                        font-family: var(--Inter);
+                                        font-size: 16px;
+                                        font-weight: 400;
+                                        line-height: 160%;
+                                        text-align: right;
+                                    }
+
+                                    .product_img {
+                                        object-fit: cover;
+
+                                        width: 255px;
+                                        height: 225px;
+                                    }
+                                }
+
+                                .bottom {
+                                    .info_prise_and_name {
+
+                                        display: flex;
+                                        flex-direction: column;
+                                        gap: 16px;
+
+                                        font-family: var(--Inter);
+                                        text-align: left;
+
+                                        p {
+                                            color: var(--black);
+                                            font-size: 18px;
+                                            font-weight: 300;
+                                            line-height: 160%;
+                                            letter-spacing: 1%;
+
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+
+                                        span {
+                                            color: rgb(119, 119, 119);
+                                            font-size: 16px;
+                                            font-weight: 500;
+                                            line-height: 123%;
+                                            letter-spacing: 0%;
+                                        }
+                                    }
+
+                                    .bey_product {
+
+                                        margin-top: 25px;
+
+                                        width: 100%;
+
+                                        transition: all .5s ease;
+                                        transform: scale(0);
+
+                                        position: absolute;
+                                        bottom: -50px;
+                                        left: 0px;
+                                        z-index: 1;
+
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+
+                                        padding: 16px 0px;
+                                        cursor: pointer;
+
+                                        border: none;
+                                        border-radius: 10px;
+                                        background: rgb(245, 117, 32);
+
+                                        .blok_button {
+
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+
+                                            img {
+
+                                                width: 25px;
+                                                height: 25px;
+                                            }
+
+                                            span {
+
+                                                color: var(--white);
+                                                font-family: var(--Inter);
+                                                font-size: 16px;
+                                                font-weight: 500;
+                                                line-height: 123%;
+                                                letter-spacing: 0%;
+                                                text-align: center;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            .product_blok_item:hover {
+                                transition: all .5s ease;
+
+                                border-radius: 10px;
+                                box-shadow: 0px 0px 0px 0px rgba(186, 186, 186, 0.1), 2px 9px 21px 0px rgba(186, 186, 186, 0.1), 6px 38px 38px 0px rgba(186, 186, 186, 0.09), 14px 84px 51px 0px rgba(186, 186, 186, 0.05), 25px 150px 61px 0px rgba(186, 186, 186, 0.01), 39px 235px 67px 0px rgba(186, 186, 186, 0);
+                                background: rgb(255, 255, 255);
+                            }
+
+                            .product_blok_item:hover .bey_product {
+                                transform: scale(1);
+
+                                position: absolute;
+                                bottom: -50px;
+                                left: 0px;
+                                z-index: 1;
+                            }
+                        }
+
+                        .paginator {
+
+                            margin-top: 40px;
+
+                            display: flex;
+                            align-items: center;
+                            flex-direction: column;
+                        }
                     }
                 }
             }

@@ -2,7 +2,15 @@ import FilterMain from "../components/filterMain"
 import ProductMain from "../components/productMain"
 
 
-const Main = () => {
+const Main = (
+    {
+        products,
+        setProducts,
+        filter,
+        setFilter,
+        page,
+        setPage
+    }) => {
 
     return (
         <>
@@ -11,8 +19,8 @@ const Main = () => {
 
                     <div className="main_items">
 
-                        <FilterMain />
-                        <ProductMain />
+                        <FilterMain setFilter={setFilter} />
+                        <ProductMain page={page} setPage={setPage} products={products} />
 
                     </div>
 

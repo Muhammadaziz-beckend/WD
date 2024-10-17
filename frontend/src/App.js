@@ -4,9 +4,21 @@ import './static/css/style.css'
 import Header from './components/header.jsx'
 import NavBar from './components/navBar.jsx';
 import Main from './main/main.jsx';
+import Date from './data/Date.js'
+
+
 
 
 const App = () => {
+  const {
+    products,
+    setProducts,
+    filter,
+    setFilter,
+    page,
+    setPage,
+  } = Date()
+
   return (
     <Router>
       <Routes>
@@ -15,9 +27,16 @@ const App = () => {
           <>
             <Header />
             <NavBar />
-            <Main />
+            <Main
+              products={products}
+              setProducts={setProducts}
+              filter={filter}
+              setFilter={setFilter}
+              page={page}
+              setPage={setPage}
+            />
           </>
-        }/>
+        } />
 
       </Routes>
     </Router>

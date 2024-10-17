@@ -3,7 +3,7 @@ import RangPrice from "./filter/rangPrice";
 import Get from "../request/get";
 
 
-const FilterMain = () => {
+const FilterMain = ({ setFilter }) => {
 
     const [isChecked, setIsChecked] = useState(false);
 
@@ -32,15 +32,43 @@ const FilterMain = () => {
         // 
     }, [])
 
+    const headSubmit = (event) => {
+        event.preventDefault()
+
+        let formGet = new FormData(event.target)
+
+
+        if (formGet.get('in_stock') == 'on') {
+            formGet.set('in_stock', 'true')
+        }
+
+        let obj = {}
+
+        for (let [key, value] of formGet.entries()) {
+
+            if (key in obj) {
+                obj[key].push(value)
+            } else {
+                if (value != '') {
+                    obj[key] = [value]
+                }
+            }
+
+        }
+
+        setFilter(obj);
+    }
+
 
     return (
         <aside className="aside">
             <div className="aside_container">
-                <form className="aside_items">
+                <form className="aside_items" onSubmit={headSubmit}>
                     <div className="blok checkbox">
                         <label className="checkbox">
                             <p>Только в наличии</p>
                             <input
+                                name="in_stock"
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={handleToggle}
@@ -117,7 +145,7 @@ const FilterMain = () => {
                     <div className="group_button_form">
 
                         <button type="submit" className="button button1">Фильтровать</button>
-                        <button type="reset" className="button">Сбросить фильтры</button>
+                        <button onClick={() => setFilter({})} type="reset" className="button">Сбросить фильтры</button>
                     </div>
                 </form>
             </div>
