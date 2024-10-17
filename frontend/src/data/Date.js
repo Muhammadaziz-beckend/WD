@@ -3,7 +3,7 @@ import Get from "../request/get";  // Предполагаем, что Get — �
 
 const Date = () => {
   const [products, setProducts] = useState([]);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState({});
   const [page, setPage] = useState(1);
 
   // Функция для создания URL с фильтрами
@@ -31,17 +31,18 @@ const Date = () => {
   useEffect(() => {
     const fetchData = async () => {
       const apiUrl = buildUrlWithParams(`http://127.0.0.1:8000/api/v1/products/?page=${page}`, filter);
+      console.log(apiUrl);
+      
       const result = await Get(apiUrl); // Предполагаем, что Get возвращает данные с API
       setProducts(result); // Обновляем продукты новыми данными
     };
 
-    if (products) {
-      productsSet(`http://127.0.0.1:8000/api/v1/products/?page=${page}`)
-    }
-
     fetchData(); 
 
   }, [filter, page]);  // Следим за изменениями фильтра и страницы
+
+  console.log(filter);
+  
 
   return {
     products,

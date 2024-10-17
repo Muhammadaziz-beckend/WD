@@ -11,11 +11,11 @@ const ProductMain = (
         page,
         setPage,
         products,
+        filter,
+        setFilter
     }
 ) => {
 
-
-    console.log(products);
 
 
     return (
@@ -24,17 +24,21 @@ const ProductMain = (
                 <div className="container_product">
                     <div className="product_items">
                         <div className="hed_product">
-                            <select name="" id="">
+                            <select onChange={(event) => {
+                                const value = { "ordering": [event.target.value] };
+                                setFilter({
+                                    ...filter,
+                                    ...value
+                                });
+                            }} name='ordering' id="">
                                 <option value="">Сортировка от последнего</option>
-                                <option value="">По популярности</option>
-                                <option value="">По рейтингу</option>
-                                <option value="">Цены: по возрастанию</option>
-                                <option value="">Цены: по убыванию</option>
+                                <option value="price">Цены: по возрастанию</option>
+                                <option value="-price">Цены: по убыванию</option>
                             </select>
                         </div>
 
                         <div className="product_blok_items">
-                            {products?.data?.results?.map(item => (
+                            {products?.data?.results?.length != 0 ? products?.data?.results?.map(item => (
                                 <div className="product_blok_item" key={item?.id}>
                                     <div className="top">
                                         <div className="flag">
@@ -62,7 +66,7 @@ const ProductMain = (
                                         </NavLink>
                                     </div>
                                 </div>
-                            ))}
+                            )) : '404'}
                         </div>
 
 

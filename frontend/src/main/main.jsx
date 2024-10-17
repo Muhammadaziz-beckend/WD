@@ -19,8 +19,8 @@ const Main = (
 
                     <div className="main_items">
 
-                        <FilterMain setFilter={setFilter} />
-                        <ProductMain page={page} setPage={setPage} products={products} />
+                        <FilterMain setFilter={setFilter} filter={filter} />
+                        <ProductMain page={page} setPage={setPage} products={products} setFilter={setFilter} />
 
                     </div>
 
