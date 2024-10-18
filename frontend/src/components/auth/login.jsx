@@ -16,7 +16,7 @@ const Login = () => {
         let formData = new FormData(event.target);
 
         if (active !== 'login') {
-            formData.append('phone',phone)
+            formData.append('phone', '+' + phone)
         }
 
         let date = {}
@@ -24,7 +24,9 @@ const Login = () => {
             date[key] = value
         }
 
-
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
         try {
             PostComponent(`http://127.0.0.1:8000/api/v1/auth/${active == 'login' ? 'login' : 'register'}/`, date).then(
                 r => {
@@ -33,6 +35,7 @@ const Login = () => {
                 }
             )
         } catch (e) {
+
             console.log(e);
 
         }
