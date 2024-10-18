@@ -44,8 +44,12 @@ class RegisterApiView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            user_data = self.get_serializer(user).data  
+            user_data = self.get_serializer(user).data
+            if user_data.get('avatar'):
+                avatar_url = request.build_absolute_uri(user_data['avatar'])
+                user_data['avatar'] = avatar_url
+
             return Response({
-                'user': user_data,  
+                'user': user_data,
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
