@@ -44,7 +44,8 @@ class RegisterApiView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            user_data = self.get_serializer(user).data  
             return Response({
-                'detail': 'Пользователь успешно зарегистрирован',
+                'user': user_data,  
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
