@@ -95,7 +95,7 @@ class Bike(models.Model):
     saddle = models.CharField('седло', max_length=170)
     fork = models.CharField('Вилка', max_length=170)
     takeaway = models.CharField('Вынос', max_length=170) 
-    wheels = models.CharField('Колеса', max_length=170) 
+    wheels = models.CharField('Колеса', max_length=170)
     handlebar = models.CharField('руль', max_length=170) 
     brake_type = models.CharField(
         max_length=50,

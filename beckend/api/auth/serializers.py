@@ -23,15 +23,15 @@ class ProfileSerializer(serializers.ModelSerializer):
             'avatar',
             'role',
         )
-        
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     password_confirm = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
+    
     class Meta:
         model = User
-        fields = ('email', 'phone','first_name', 'last_name','password', 'password_confirm','avatar')
+        fields = ('email', 'phone', 'first_name', 'last_name', 'password', 'password_confirm', 'avatar')
 
     def validate(self, data):
         if data['password'] != data['password_confirm']:
@@ -43,6 +43,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             email=validated_data['email'],
             phone=validated_data['phone'],
-            password=validated_data['password']
+            password=validated_data['password'],
+            first_name=validated_data['first_name'], 
+            last_name=validated_data['last_name'],    
+            avatar=validated_data.get('avatar')       
         )
         return user
