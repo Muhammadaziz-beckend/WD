@@ -25,7 +25,10 @@ const App = () => {
 
         <Route path="/" element={
           <>
-            <Header />
+            <Header
+              filter={filter}
+              setFilter={setFilter}
+            />
             <NavBar />
             <Main
               products={products}

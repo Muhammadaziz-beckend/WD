@@ -1,3 +1,4 @@
+import { useState,useRef } from "react"
 import FilterMain from "../components/filterMain"
 import ProductMain from "../components/productMain"
 
@@ -10,7 +11,12 @@ const Main = (
         setFilter,
         page,
         setPage
-    }) => {
+    }
+) => {
+
+    const [filterMobile,setFilterMobile] = useState(true)
+
+    const productRef = useRef()
 
     return (
         <>
@@ -19,8 +25,8 @@ const Main = (
 
                     <div className="main_items">
 
-                        <FilterMain setFilter={setFilter} filter={filter} />
-                        <ProductMain page={page} setPage={setPage} products={products} setFilter={setFilter} />
+                        <FilterMain productRef={productRef} filterMobile={filterMobile} setFilterMobile={setFilterMobile} setFilter={setFilter} filter={filter} />
+                        <ProductMain productRef={productRef} filterMobile={filterMobile} setFilterMobile={setFilterMobile} page={page} setPage={setPage} products={products} setFilter={setFilter} />
 
                     </div>
 

@@ -11,15 +11,20 @@ const ProductMain = (
         setPage,
         products,
         filter,
-        setFilter
+        setFilter,
+        filterMobile,
+        setFilterMobile,
+        productRef,
     }
 ) => {
 
-
+    const scrollToSection = () => {
+        productRef.current.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <>
-            <div className="product">
+            <div className="product" ref={productRef}>
                 <div className="container_product">
                     <div className="product_items">
                         <div className="hed_product">
@@ -35,14 +40,14 @@ const ProductMain = (
                                 <option value="-price">Цены: по убыванию</option>
                             </select>
 
-                            <button className='filter_in_media'>
+                            <button onClick={() => { setFilterMobile(!filterMobile) }} className='filter_in_media'>
                                 <img src={Filter_icon} alt="" />
                             </button>
                         </div>
 
                         <div className="product_blok_items">
                             {products?.data?.results?.length != 0 ? products?.data?.results?.map(item => (
-                                <div className="product_blok_item" key={item?.id}>
+                                <NavLink to={`product/${item?.id}`} className="product_blok_item" key={item?.id}>
                                     <div className="top">
                                         <div className="flag">
                                             <img src={item?.flag?.image} alt="Flag" />
@@ -61,21 +66,21 @@ const ProductMain = (
                                             <span>{Math.ceil(Number(item?.price))} ₽</span>
                                         </div>
 
-                                        <NavLink to={`product/${item?.id}`} className="bey_product">
+                                        <NavLink to={`product/bey/${item?.id}`} className="bey_product">
                                             <div className="blok_button">
                                                 <img src={Mouth} alt="Mouse" />
                                                 <span>В 1 клик</span>
                                             </div>
                                         </NavLink>
                                     </div>
-                                </div>
+                                </NavLink>
                             )) : '404'}
                         </div>
 
 
                         <div className="paginator">
 
-                            {products?.data?.next || products?.data?.previous ? <PaginationRounded count={Math.ceil(Number(products?.data?.count) / 9)} page={page} setPage={setPage} /> : ''}
+                            {products?.data?.next || products?.data?.previous ? <PaginationRounded scrollToSection={scrollToSection}  count={Math.ceil(Number(products?.data?.count) / 9)} page={page} setPage={setPage} /> : ''}
 
                         </div>
                     </div>

@@ -6,7 +6,8 @@ const PaginationRounded = (
   {
     page,
     setPage,
-    count
+    count,
+    scrollToSection,
   }
 ) => {
   const handlePageChange = (event, value) => {
@@ -28,6 +29,7 @@ const PaginationRounded = (
       <Pagination
         count={count}
         page={page}
+        onClick={scrollToSection}
         onChange={handlePageChange}
         variant="outlined"
         shape="rounded"

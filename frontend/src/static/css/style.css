@@ -306,6 +306,97 @@ body {
                 }
             }
 
+            .account_user {
+
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+
+                .info_form {
+
+                    display: flex;
+                    align-items: center;
+                    gap: 28px;
+
+                    margin-bottom: 16px;
+
+                    font-family: var(--Inter);
+
+                    .active {
+                        color: var(--black) !important;
+                        font-size: 24px !important;
+                        font-weight: 500;
+                        line-height: 160%;
+                        letter-spacing: 1%;
+                        text-align: left;
+                    }
+
+                    .login_register_default_link {
+                        cursor: pointer;
+
+                        color: rgb(119, 119, 119);
+                        font-size: 18px;
+                        font-weight: 500;
+                        line-height: 160%;
+                        letter-spacing: 1%;
+                        text-align: left;
+                    }
+                }
+
+                label {
+
+                    p {
+
+                        margin-bottom: 8px;
+
+                        color: rgb(76, 76, 76);
+                        font-family: var(--Inter);
+                        font-size: 16px;
+                        font-weight: 400;
+                        line-height: 160%;
+                        letter-spacing: 0%;
+                        text-align: left;
+                    }
+
+                    input {
+
+                        width: 100%;
+
+                        padding: 16px;
+
+                        outline: none;
+
+                        border: none;
+                        border-radius: 10px;
+                        background: rgb(248, 248, 248);
+                    }
+
+                    .form-control {
+                        padding: 16px 0 16px 45px;
+                    }
+                }
+
+                button[type="submit"] {
+
+                    margin-top: 24px;
+                    padding: 16px 0px;
+
+                    width: 100%;
+
+                    cursor: pointer;
+
+                    border: none;
+                    border-radius: 10px;
+                    background: var(--orange);
+
+                    color: var(--white);
+                    font-family: var(--Inter);
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: 123%;
+                    text-align: center;
+                }
+            }
         }
     }
 }
@@ -357,6 +448,26 @@ body {
         }
     }
 }
+
+@media screen and (max-width:420px) {
+    .header {
+        & .container {
+            & .header_items {
+                & .menu_blok {
+                    .blok_user {
+
+                        position: relative;
+                        width: 100%;
+                        height: 100vh;
+                        background-color: var(--white);
+                        padding: 104px 15px 0px 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 a {
     text-decoration: none;
@@ -503,6 +614,7 @@ a {
 
             display: flex;
 
+
             padding: 48px 25px;
 
             .aside {
@@ -510,6 +622,10 @@ a {
                 .aside_container {
 
                     .aside_items {
+
+                        .mobile_info {
+                            display: none;
+                        }
 
                         .checkbox {
 
@@ -833,6 +949,9 @@ a {
 
                             }
 
+                            .filter_in_media {
+                                display: none;
+                            }
                         }
 
                         .product_blok_items {
@@ -1015,24 +1134,121 @@ a {
     }
 }
 
-.none {
-    display: none;
-}
-
-@media screen and (max-width:420px) {
-
-
+@media screen and (max-width:1094px) {
     .main {
 
         .container {
 
             .main_items {
 
+                .product {
+
+                    .container_product {
+
+                        .product_items {
+
+                            .product_blok_items {
+
+                                margin-top: 16px;
+                                display: grid;
+                                grid-template-columns: repeat(2, 1fr);
+                                grid-gap: 20px;
+                                padding: 20px;
+                                transition: all .5s ease;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:800px) {
+    .main {
+
+        .container {
+
+            .main_items {
+
+                .product {
+
+                    .container_product {
+
+                        .product_items {
+
+                            .product_blok_items {
+
+                                margin-top: 16px;
+                                display: grid;
+                                grid-template-columns: repeat(1, 1fr);
+                                grid-gap: 20px;
+                                padding: 20px;
+                                transition: all .5s ease;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:720px) {
+
+    .none {
+        display: none;
+    }
+
+    .main {
+
+        .container {
+
+            .main_items {
+                flex-direction: column;
+                align-items: center;
+
                 .aside {
+
+                    width: 100%;
+
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+
+                    z-index: 1;
+
+                    background: rgb(255, 255, 255);
 
                     .aside_container {
 
                         .aside_items {
+
+                            padding: 40px 20px;
+
+                            .mobile_info {
+                                display: block;
+
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+
+                                h4 {
+                                    color: rgb(0, 0, 0);
+                                    font-family: var(--Inter);
+                                    font-size: 20px;
+                                    font-weight: 500;
+                                    line-height: 160%;
+                                    letter-spacing: 1%;
+                                    text-align: left;
+                                }
+
+                                img {
+                                    cursor: pointer;
+                                }
+                            }
 
                             .checkbox {
 
@@ -1090,7 +1306,9 @@ a {
                                 }
                             }
 
-                            .blok {}
+                            .blok {
+                                padding: 32px 16px 32px 0px;
+                            }
 
                             .group_cat {
                                 margin-top: 24px;
@@ -1306,6 +1524,9 @@ a {
                                 }
 
                                 .filter_in_media {
+
+                                    display: block;
+
                                     padding: 12px 16px;
 
                                     cursor: pointer;

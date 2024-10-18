@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import RangPrice from "./filter/rangPrice";
 import Get from "../request/get";
 
+import Exit from '../static/img/exit.svg'
 
-const FilterMain = ({ setFilter }) => {
+const FilterMain = ({ filterMobile, setFilterMobile, setFilter, productRef }) => {
 
     const [isChecked, setIsChecked] = useState(false);
 
@@ -59,97 +60,106 @@ const FilterMain = ({ setFilter }) => {
         setFilter(obj);
     }
 
+    const scrollToSection = () => {
+        productRef.current.scrollIntoView({ behavior: 'smooth' });
+    };
+
 
     return (
-        <aside className="aside none">
-            <div className="aside_container">
-                <form className="aside_items" onSubmit={headSubmit}>
-                    <div className="blok checkbox">
-                        <label className="checkbox">
-                            <p>Только в наличии</p>
-                            <input
-                                name="in_stock"
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={handleToggle}
-                                id="toggle"
-                            />
-                            <div className={`feck ${isChecked ? 'active' : ''}`}>
-                                <div className={`feck_blok_boll ${isChecked ? 'active' : ''}`}></div>
+        <>
+            <aside className={`aside ${filterMobile ? 'none' : ''}`}>
+                <div className="aside_container">
+                    <form className="aside_items" onSubmit={headSubmit}>
+                        <div className="mobile_info">
+                            <h4>Фильтр</h4> <img onClick={() => setFilterMobile(!filterMobile)} src={Exit} alt="" />
+                        </div>
+                        <div className="blok checkbox">
+                            <label className="checkbox">
+                                <p>Только в наличии</p>
+                                <input
+                                    name="in_stock"
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    onChange={handleToggle}
+                                    id="toggle"
+                                />
+                                <div className={`feck ${isChecked ? 'active' : ''}`}>
+                                    <div className={`feck_blok_boll ${isChecked ? 'active' : ''}`}></div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div className="blok">
+                            <h3>Категории товара</h3>
+
+                            <div className="group_cat">
+
+                                {categoriesDate?.map(item => (
+                                    <label className="radioInput">
+                                        <input
+                                            type="radio"
+                                            name="categories"
+                                            value={item?.id}
+                                        />
+                                        <div className={`feckRadio`}></div>
+                                        <p>{item?.name}</p>
+                                    </label>
+                                ))}
+
                             </div>
-                        </label>
-                    </div>
+                        </div>
 
-                    <div className="blok">
-                        <h3>Категории товара</h3>
+                        <div className="blok">
+                            <h3>Цена</h3>
 
-                        <div className="group_cat">
+                            <div className="blok_range_prise">
+                                <div className="top">
+                                    <RangPrice priseStart={setPriceFrom} priseEnd={setPriceTo} />
+                                </div>
+                                <div className="bottom">
+                                    <input type="text" name="price_from" value={priceFrom} />
+                                    <span>-</span>
+                                    <input type="text" name="price_to" value={priceTo} />
+                                </div>
+                            </div>
+                        </div>
 
-                            {categoriesDate?.map(item => (
-                                <label className="radioInput">
-                                    <input
-                                        type="radio"
-                                        name="categories"
-                                        value={item?.id}
-                                    />
-                                    <div className={`feckRadio`}></div>
+                        <div className="blok">
+                            <h3>Бренд</h3>
+
+                            <div className="blok_checkbox_multiple">
+
+                                {brandDate?.map(item => (<label className="blokInputCh" >
+                                    <input type="checkbox" name="brands" value={item?.id} />
+                                    <div className="fake"></div>
                                     <p>{item?.name}</p>
-                                </label>
-                            ))}
+                                </label>))}
 
-                        </div>
-                    </div>
-
-                    <div className="blok">
-                        <h3>Цена</h3>
-
-                        <div className="blok_range_prise">
-                            <div className="top">
-                                <RangPrice priseStart={setPriceFrom} priseEnd={setPriceTo} />
-                            </div>
-                            <div className="bottom">
-                                <input type="text" name="price_from" value={priceFrom} />
-                                <span>-</span>
-                                <input type="text" name="price_to" value={priceTo} />
                             </div>
                         </div>
-                    </div>
 
-                    <div className="blok">
-                        <h3>Бренд</h3>
+                        <div className="blok">
+                            <h3>Цвет</h3>
 
-                        <div className="blok_checkbox_multiple">
-
-                            {brandDate?.map(item => (<label className="blokInputCh" >
-                                <input type="checkbox" name="brands" value={item?.id} />
-                                <div className="fake"></div>
-                                <p>{item?.name}</p>
-                            </label>))}
-
+                            <div className="blok_multiple">
+                                {colorDate?.map(item =>
+                                (<label>
+                                    <input type="radio" name="color" value={item?.id} />
+                                    <div className="fake" style={{ background: `${item?.name}` }}></div>
+                                </label>)
+                                )}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="blok">
-                        <h3>Цвет</h3>
+                        <div className="group_button_form">
 
-                        <div className="blok_multiple">
-                            {colorDate?.map(item =>
-                            (<label>
-                                <input type="radio" name="color" value={item?.id} />
-                                <div className="fake" style={{ background: `${item?.name}` }}></div>
-                            </label>)
-                            )}
+                            <button onClick={() => { setFilterMobile(!filterMobile); scrollToSection() }} type="submit" className="button button1">Фильтровать</button>
+                            <button onClick={() => { setFilter({}); setFilterMobile(!filterMobile); scrollToSection() }} type="reset" className="button">Сбросить фильтры</button>
                         </div>
-                    </div>
-
-                    <div className="group_button_form">
-
-                        <button type="submit" className="button button1">Фильтровать</button>
-                        <button onClick={() => setFilter({})} type="reset" className="button">Сбросить фильтры</button>
-                    </div>
-                </form>
-            </div>
-        </aside>
+                    </form>
+                </div>
+            </aside>
+        </>
     )
 }
 
