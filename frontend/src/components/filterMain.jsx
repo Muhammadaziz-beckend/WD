@@ -61,7 +61,7 @@ const FilterMain = ({ setFilter }) => {
 
 
     return (
-        <aside className="aside">
+        <aside className="aside none">
             <div className="aside_container">
                 <form className="aside_items" onSubmit={headSubmit}>
                     <div className="blok checkbox">

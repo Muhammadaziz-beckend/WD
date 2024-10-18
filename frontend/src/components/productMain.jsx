@@ -1,8 +1,7 @@
 import PaginationRounded from './paginator'
 
 import Mouth from '../static/img/mouth.svg'
-import Image_test from '../static/img/image_test.png'
-import Flag from '../static/img/flag.png'
+import Filter_icon from '../static/img/filter_icon.svg'
 
 import { NavLink } from 'react-router-dom'
 
@@ -35,6 +34,10 @@ const ProductMain = (
                                 <option value="price">Цены: по возрастанию</option>
                                 <option value="-price">Цены: по убыванию</option>
                             </select>
+
+                            <button className='filter_in_media'>
+                                <img src={Filter_icon} alt="" />
+                            </button>
                         </div>
 
                         <div className="product_blok_items">
