@@ -5,6 +5,7 @@ import Header from './components/header.jsx'
 import NavBar from './components/navBar.jsx';
 import Main from './main/main.jsx';
 import Date from './data/Date.js'
+import ProductDetail from './components/productDetail.jsx';
 
 
 
@@ -38,6 +39,16 @@ const App = () => {
               page={page}
               setPage={setPage}
             />
+          </>
+        } />
+
+        <Route path='/product/:id' element={
+          <>
+            <Header
+              filter={filter}
+              setFilter={setFilter}
+            />
+            <ProductDetail />
           </>
         } />
 

@@ -9,9 +9,10 @@ import close from '../static/img/close.svg'
 
 import Menu from './select'
 import Login from "./auth/login.jsx";
+import Account from './auth/account.jsx'
 
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const Header = ({ filter, setFilter }) => {
 
@@ -24,6 +25,7 @@ const Header = ({ filter, setFilter }) => {
     const [searchOpen, setSearchOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const [userMenuOpen, setUserMenuOpen] = useState(false)
+    const [is_user_authorization, set_user_authorization] = useState(false)
 
     const isActive = (ref = bicyclesRef) => {
 
@@ -36,7 +38,10 @@ const Header = ({ filter, setFilter }) => {
 
     }
 
-    useEffect(() => { bicyclesRef.current.className = `active` }, [])
+    useEffect(() => {
+        bicyclesRef.current.className = `active`
+        set_user_authorization(Boolean(localStorage.getItem('infoUserBike')))
+    }, [])
 
     const headerSubmit = (
         event
@@ -57,10 +62,10 @@ const Header = ({ filter, setFilter }) => {
 
                     <div className="header_items">
 
-                        <div className="logo">
+                        <NavLink to='/' className="logo">
 
                             <img src={logo} alt="" />
-                        </div>
+                        </NavLink>
 
                         <div className="blok_access">
                             <div className="menu">
@@ -106,7 +111,10 @@ const Header = ({ filter, setFilter }) => {
                                     <img src={close} alt="" />
                                 </div>
 
-                                <Login />
+                                {
+                                    is_user_authorization ? <Account /> : <Login />
+                                }
+
 
                             </div>
                         </div>
