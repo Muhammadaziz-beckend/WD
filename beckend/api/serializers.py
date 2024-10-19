@@ -2,13 +2,18 @@ from pprint import pprint
 
 from rest_framework import serializers
 
-from bike.models import Bike, Category,Size,Brand,FrameMaterial,Color,Flag
+from bike.models import Bike, Category, Order,Size,Brand,FrameMaterial,Color,Flag
 
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
+        fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
         fields = '__all__'
 
 class FrameMaterialSerializer(serializers.ModelSerializer):

@@ -6,12 +6,12 @@ from .clone import clone_bike
 from api.auth.permissions import IsSuperUser
 from api.filters import BikeFilter
 from api.paginations import SimplePagintion
-from api.serializers import BrandSerializer, CategorySerializer, ColorSerializer, DetailBikeSerializer, ListBikeSerializer, BikeSerializer
+from api.serializers import BrandSerializer, CategorySerializer, ColorSerializer, DetailBikeSerializer, ListBikeSerializer, BikeSerializer, OrderSerializer
 from api.permissions import IsAdminOrReadOnly
 from api.mixins import UltraGenericAPIView, UltraModelMixin
-from bike.models import Bike, Brand, Category, Color, Flag, FrameMaterial, Size
+from bike.models import Bike, Brand, Category, Color, Flag, FrameMaterial, Order, Size
 from rest_framework.response import Response
-from rest_framework.generics import get_object_or_404, GenericAPIView
+from rest_framework.generics import get_object_or_404, GenericAPIView,ListAPIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -126,7 +126,29 @@ class DetailUpdateDestroyBikeApiView(ListModelMixin, DestroyModelMixin, UltraGen
 #             return DetailBikeSerializer
 #         return BikeSerializer
 
+class OrderCreateView(UltraModelMixin, GenericAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        bike = serializer.validated_data['bike']
+        quantity = serializer.validated_data['quantity']
+        price = bike.price  
+
+        serializer.save(user=self.request.user, price=price, status=Order.PENDING)
+
+class OrderHistoryView(UltraModelMixin, GenericAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).order_by('-order_date')
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 class CategoryViewSet(UltraModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

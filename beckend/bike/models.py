@@ -1,6 +1,9 @@
+from django.utils import timezone
 from django.db import models
 from colorfield.fields import ColorField
 from django.core.validators import MinValueValidator
+
+from account.models import User
 
     
 class Category(models.Model):
@@ -61,6 +64,31 @@ class Flag(models.Model):
     image = models.ImageField('флаг', upload_to='images/')
     def __str__(self):
         return f'{self.name}'
+
+class Order(models.Model):
+    PENDING = 'pending'
+    COMPLETED = 'completed'
+    CANCELLED = 'cancelled'
+
+    ORDER_STATUS = (
+        (PENDING, 'Pending'),
+        (COMPLETED, 'Completed'),
+        (CANCELLED, 'Cancelled'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь')
+    bike = models.ForeignKey('bike.Bike', on_delete=models.CASCADE, verbose_name='велосипед')
+    quantity = models.PositiveIntegerField('количество', default=1)
+    price = models.DecimalField('цена', max_digits=10, decimal_places=2)  # Store the price at the time of order
+    status = models.CharField('статус заказа', max_length=20, choices=ORDER_STATUS, default=PENDING)
+    order_date = models.DateTimeField('дата заказа', default=timezone.now)
+
+    def __str__(self):
+        return f'Order #{self.id} by {self.user} for {self.bike.name}'
+
+    @property
+    def total_price(self):
+        return self.quantity * self.price
     
 class Bike(models.Model):
     IN_STOCK = 'in_stock'
