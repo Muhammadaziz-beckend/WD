@@ -85,13 +85,17 @@ class ChangePasswordSerializer(serializers.Serializer):
 from rest_framework import serializers
 from account.models import User
 
+from rest_framework import serializers
+from django.contrib.auth.models import User
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['avatar', 'displayname', 'phone', 'email', 'city', 'street', 'house', 'floor', 'apartment']
+        fields = ['first_name', 'last_name', 'displayname', 'phone', 'email', 'city', 'street', 'house', 'floor', 'apartment']
 
     def update(self, instance, validated_data):
-        instance.avatar = validated_data.get('avatar', instance.avatar)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.displayname = validated_data.get('displayname', instance.displayname)
         instance.phone = validated_data.get('phone', instance.phone)
         instance.email = validated_data.get('email', instance.email)
