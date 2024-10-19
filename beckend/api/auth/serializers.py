@@ -81,3 +81,24 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+
+from rest_framework import serializers
+from account.models import User
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['avatar', 'displayname', 'phone', 'email', 'city', 'street', 'house', 'floor', 'apartment']
+
+    def update(self, instance, validated_data):
+        instance.avatar = validated_data.get('avatar', instance.avatar)
+        instance.displayname = validated_data.get('displayname', instance.displayname)
+        instance.phone = validated_data.get('phone', instance.phone)
+        instance.email = validated_data.get('email', instance.email)
+        instance.city = validated_data.get('city', instance.city)
+        instance.street = validated_data.get('street', instance.street)
+        instance.house = validated_data.get('house', instance.house)
+        instance.floor = validated_data.get('floor', instance.floor)
+        instance.apartment = validated_data.get('apartment', instance.apartment)
+        instance.save()
+        return instance

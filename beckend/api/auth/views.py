@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView,UpdateAPIView
-from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, ProfileSerializer, RegisterSerializer
+from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, ProfileSerializer, RegisterSerializer, UserProfileSerializer
 from account.models import User
 from rest_framework import generics, permissions
 
@@ -126,3 +126,18 @@ class WishlistListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Wishlist.objects.filter(user=self.request.user)
+
+class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def patch(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
