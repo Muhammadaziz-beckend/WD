@@ -8,4 +8,6 @@ urlpatterns = [
     path('logout/', views.LogoutApiView.as_view(), name='logout'),
     path('order/create/', views.OrderCreateView.as_view({'post': 'create'}), name='order-create'),
     path('order/history/', views.OrderHistoryView.as_view({'get': 'list'}), name='order-history'),
+    path('wishlist/', views.WishlistListView.as_view(), name='wishlist-list'),
+    path('wishlist/add/', views.WishlistCreateView.as_view(), name='wishlist-add'),
 ]

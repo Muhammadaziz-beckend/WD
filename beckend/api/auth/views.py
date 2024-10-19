@@ -9,8 +9,8 @@ from account.models import User
 from rest_framework import generics, permissions
 
 from api.mixins import UltraModelMixin
-from api.serializers import OrderSerializer
-from bike.models import Order
+from api.serializers import OrderSerializer, WishlistSerializer
+from bike.models import Order, Wishlist
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 class LoginApiViews(GenericAPIView):
@@ -112,3 +112,17 @@ class OrderHistoryView(UltraModelMixin, GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+    
+class WishlistCreateView(generics.CreateAPIView):
+    serializer_class = WishlistSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class WishlistListView(generics.ListAPIView):
+    serializer_class = WishlistSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Wishlist.objects.filter(user=self.request.user)

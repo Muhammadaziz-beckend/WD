@@ -2,13 +2,19 @@ from pprint import pprint
 
 from rest_framework import serializers
 
-from bike.models import Bike, Category, Order,Size,Brand,FrameMaterial,Color,Flag
+from bike.models import Bike, Category, Order,Size,Brand,FrameMaterial,Color,Flag, Wishlist
 
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
+        fields = '__all__'
+
+class SizeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Size
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -41,11 +47,17 @@ class BrandSerializer(serializers.ModelSerializer):
         model = Brand
         fields = '__all__'
 
+class WishlistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist
+        fields = ['id', 'user', 'bike', 'added_at']
+
 class ListBikeSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     brand = BrandSerializer()
     flag = FlagSerializer()
     color = ColorSerializer()
+    size = SizeSerializer()
     frame_material = FrameMaterialSerializer()
     class Meta:
         model = Bike
@@ -58,6 +70,8 @@ class DetailBikeSerializer(serializers.ModelSerializer):
     frame_material = FrameMaterialSerializer()
     brand = BrandSerializer()
     color = ColorSerializer()
+    flag = FlagSerializer()
+    size = SizeSerializer()
     class Meta:
         model = Bike
         fields = '__all__'

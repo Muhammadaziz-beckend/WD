@@ -89,6 +89,19 @@ class Order(models.Model):
     @property
     def total_price(self):
         return self.quantity * self.price
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    bike = models.ForeignKey('bike.Bike', on_delete=models.CASCADE, verbose_name="Велосипед")
+    added_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавления")
+
+    class Meta:
+        unique_together = ('user', 'bike')
+        verbose_name = "Список желаний"
+        verbose_name_plural = "Списки желаний"
+
+    def __str__(self):
+        return f'{self.user.username} - {self.bike.name}'
     
 class Bike(models.Model):
     IN_STOCK = 'in_stock'
