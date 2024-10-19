@@ -17,8 +17,6 @@ urlpatterns = [
     path('products/', views.ListCreateBikeApiView.as_view(), name='bike-list-create'),
     path('products/<int:id>/', views.DetailUpdateDestroyBikeApiView.as_view(),name='bike-detail-update-delete'),
     path('auth/', include('api.auth.urls')),
-    path('order/create/', views.OrderCreateView.as_view({'post': 'create'}), name='order-create'),
-    path('order/history/', views.OrderHistoryView.as_view({'get': 'list'}), name='order-history'),
     path('', include(router.urls)),
 ]
 

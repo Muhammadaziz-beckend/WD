@@ -8,6 +8,11 @@ from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, Prof
 from account.models import User
 from rest_framework import generics, permissions
 
+from api.mixins import UltraModelMixin
+from api.serializers import OrderSerializer
+from bike.models import Order
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
 class LoginApiViews(GenericAPIView):
     serializer_class = [LoginSerializer, ProfileSerializer]
 
@@ -83,3 +88,27 @@ class LogoutApiView(GenericAPIView):
             return Response({"detail": "Вы успешно вышли из системы."}, status=status.HTTP_200_OK)
         except (AttributeError, Token.DoesNotExist):
             return Response({"detail": "Ошибка при выходе."}, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderCreateView(UltraModelMixin, GenericAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        bike = serializer.validated_data['bike']
+        quantity = serializer.validated_data['quantity']
+        price = bike.price  
+
+        serializer.save(user=self.request.user, price=price, status=Order.PENDING)
+
+class OrderHistoryView(UltraModelMixin, GenericAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).order_by('-order_date')
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
