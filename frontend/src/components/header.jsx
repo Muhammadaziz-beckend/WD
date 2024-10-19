@@ -115,7 +115,6 @@ const Header = ({ filter, setFilter }) => {
                                     is_user_authorization ? <Account /> : <Login />
                                 }
 
-
                             </div>
                         </div>
 

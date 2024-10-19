@@ -2,8 +2,14 @@ import axios from "axios"
 
 const Get = async (url) => {
 
-    const res = await axios.get(url)
-    return res
+    try {
+
+        const res = await axios.get(url)
+        return res
+    } catch (e){
+        console.log(e);
+        
+    }
 }
 
 export default Get

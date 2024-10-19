@@ -5,18 +5,6 @@ import Get from "../../request/get"
 
 
 const Account = () => {
-    const { id } = useParams()
-
-    const [date,setDate] = useState({})
-
-    useEffect(() => {
-        Get(`http://127.0.0.1:8000/api/v1/products/${id}/`).then(r => {
-            setDate(r.data)
-        })
-     }, [])
-
-     console.log(date);
-     
 
     return (
         <div className="info_account">
