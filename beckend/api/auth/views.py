@@ -3,8 +3,10 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView
-from api.auth.serializers import LoginSerializer, ProfileSerializer, RegisterSerializer
+from rest_framework.generics import GenericAPIView,UpdateAPIView
+from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, ProfileSerializer, RegisterSerializer
+from account.models import User
+from rest_framework import generics, permissions
 
 class LoginApiViews(GenericAPIView):
     serializer_class = [LoginSerializer, ProfileSerializer]
@@ -51,3 +53,20 @@ class RegisterApiView(GenericAPIView):
 
             return Response(user_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangePasswordView(UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    model = User
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        self.get_object().set_password(serializer.validated_data['new_password'])
+        self.get_object().save()
+
+        return Response({'detail': 'Пароль успешно изменен'}, status=status.HTTP_200_OK)
