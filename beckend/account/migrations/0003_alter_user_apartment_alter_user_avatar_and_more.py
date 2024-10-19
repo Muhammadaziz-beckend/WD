@@ -11,11 +11,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AddField(
             model_name='user',
             name='apartment',
-            field=models.CharField(max_length=10, verbose_name='квартира'),
+            field=models.CharField(blank=True, max_length=10, null=True, verbose_name='квартира'),
         ),
+
         migrations.AlterField(
             model_name='user',
             name='avatar',

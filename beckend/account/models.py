@@ -28,14 +28,14 @@ class User(AbstractUser):
                                )
     phone = PhoneNumberField('номер телефона', unique=True)
     email = models.EmailField('электронная почта', blank=True, unique=True)
-    displayname = models.CharField('Отображаемое имя', max_length=255,)
+    displayname = models.CharField('Отображаемое имя', max_length=255,null=False, default='Unknown')
     role = models.CharField('роль', choices=ROLE, default=CLIENT, max_length=15)
     objects = UserManager()
-    city = models.CharField('Город', max_length=100,)
-    street = models.CharField('Улица',max_length=100,)
-    house = models.CharField('Дом',max_length=10,)
-    floor = models.CharField('Этаж',max_length=10,)
-    apartment = models.CharField('квартира',max_length=10,)
+    city = models.CharField('Город', max_length=100,null=False, default='Unknown')
+    street = models.CharField('Улица',max_length=100,null=False, default='Unknown')
+    house = models.CharField('Дом',max_length=10,null=False, default='Unknown')
+    floor = models.CharField('Этаж',max_length=10,null=False, default='Unknown')
+    apartment = models.CharField('квартира',max_length=10,null=False, default='Unknown')
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
