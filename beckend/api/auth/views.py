@@ -70,3 +70,16 @@ class ChangePasswordView(GenericAPIView):
         user.save()
 
         return Response({'detail': 'Пароль успешно изменен'}, status=status.HTTP_200_OK)
+
+from rest_framework.authtoken.models import Token
+
+class LogoutApiView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            token = request.auth  
+            token.delete()  
+            return Response({"detail": "Вы успешно вышли из системы."}, status=status.HTTP_200_OK)
+        except (AttributeError, Token.DoesNotExist):
+            return Response({"detail": "Ошибка при выходе."}, status=status.HTTP_400_BAD_REQUEST)
