@@ -168,6 +168,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     'http://127.0.0.1:3000',
 # ]
 
+# SWAGGER_SETTINGS = {
+#     "USE_SESSION_AUTH": False,  # Отключает проверку CSRF для Swagger
+# }
+
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
