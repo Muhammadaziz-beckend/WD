@@ -10,6 +10,8 @@ const Login = () => {
     const [active, setActive] = useState('login')
     const [phone, setPhone] = useState()
 
+    const [error, setError] = useState()
+
     const headSubmit = (event) => {
         event.preventDefault();
 
@@ -30,8 +32,13 @@ const Login = () => {
         try {
             PostComponent(`http://127.0.0.1:8000/api/v1/auth/${active == 'login' ? 'login' : 'register'}/`, date).then(
                 r => {
-                    localStorage.setItem('infoUserBike', JSON.stringify(r.data));
-                    navigate('/auth/')
+                    if (r.data) {
+                        localStorage.setItem('infoUserBike', JSON.stringify(r.data));
+                        window.location.reload();
+                    }else {
+                        setError(r?.response?.data?.detail)
+                    }
+                    // navigate('/auth/')
                 }
             )
         } catch (e) {
@@ -94,7 +101,9 @@ const Login = () => {
                     )
                 }
 
-
+                <p className="error">
+                    {error}
+                </p>
                 <button type="submit">Войти</button>
             </form>
         </>

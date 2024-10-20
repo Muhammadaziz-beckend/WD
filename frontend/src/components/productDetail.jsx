@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
-import { NavLink, useParams } from "react-router-dom"
+import { NavLink, useNavigate, useParams } from "react-router-dom"
 
 import Get from "../request/get"
+import Post from "../request/post"
 
-import Minus from '../static/img/minus.svg'
-import Plus from '../static/img/plus.svg'
-import Featured from '../static/img/featured.svg'
-
-const ProductDetail = () => {
+const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
+    const navigate = useNavigate()
     const { id } = useParams()
 
     const [date, setDate] = useState({})
@@ -25,7 +23,47 @@ const ProductDetail = () => {
         })
     }, [])
 
-    console.log(date);
+    const addHistory = () => {
+        // Получаем информацию о пользователе
+        const storedUser = localStorage.getItem('infoUserBike');
+
+        // Проверяем, есть ли данные в localStorage
+        if (!storedUser) {
+            // Если данных нет, открываем меню пользователя и выходим из функции
+            setUserMenuOpen(!userMenuOpen);
+            return false;
+        }
+
+        // Пытаемся разобрать JSON, если он есть
+        const user = JSON.parse(storedUser);
+
+        // Если у пользователя нет id или token, выходим из функции
+        if (!user?.id || !user?.token) {
+            console.error("Пользователь не авторизован или нет токена.");
+            return false;
+        }
+
+        // Формируем объект заказа
+        const dateOrder = {
+            "quantity": count,
+            "price": Math.ceil(date?.price) * count,
+            "status": "pending",
+            "order_date": new Date(),
+            "user": user.id,
+            "bike": id
+        };
+
+        // Отправляем запрос с использованием токена пользователя
+        Post('http://127.0.0.1:8000/api/v1/auth/order/create/', dateOrder, user.token)
+            .then(r => {
+                navigate('/auth/history');
+            })
+            .catch(error => {
+                console.error("Ошибка при создании заказа:", error);
+            });
+    };
+
+
     return (
 
         <>
@@ -79,7 +117,7 @@ const ProductDetail = () => {
                                                 +
                                             </button>
                                         </div>
-                                        <button className="bey_product" >
+                                        <button onClick={addHistory} className="bey_product" >
                                             В корзину
                                         </button>
 
@@ -133,7 +171,7 @@ const ProductDetail = () => {
 
                             <div className="blok_characteristic">
                                 <span className="title">Размер</span>
-                                <span className="title_value">{`${date?.size ? date?.size : 'не указен'}`}</span>
+                                <span className="title_value">{`${date?.size ? date?.size?.name : 'не указен'}`}</span>
                             </div>
 
                             <div className="blok_characteristic">
@@ -150,7 +188,7 @@ const ProductDetail = () => {
                                 <span className="title">Покрышки</span>
                                 <span className="title_value">{`${date?.tires ? date?.tires : 'не указен'}`}</span>
                             </div>
-                                    
+
                             <div className="blok_characteristic">
                                 <span className="title">Рама</span>
                                 <span className="title_value">{`${date?.frame ? date?.frame : 'не указен'}`}</span>
@@ -200,8 +238,6 @@ const ProductDetail = () => {
                                 <span className="title">Манетки</span>
                                 <span className="title_value">{`${date?.shifters ? date?.shifters : 'не указен'}`}</span>
                             </div>
-
-                            {/*brake_type	  */}
                         </div>
                     </div>
                 </div>

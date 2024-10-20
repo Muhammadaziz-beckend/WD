@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const Post = async (url, data, token = null) => {
+const Patch = async (url, data, token = null) => {
     try {
         const config = {
             headers: {
@@ -8,15 +8,14 @@ const Post = async (url, data, token = null) => {
             },
         };
 
-        const res = await axios.post(url, data, token ? config : {
+        const res = await axios.patch(url, data, token ? config : {
             headers: {},
         });
         console.log(res);
         return res;
     } catch (error) {
         console.error("Ошибка при отправке данных", error);
-        return error
     }
 };
 
-export default Post;
+export default Patch;

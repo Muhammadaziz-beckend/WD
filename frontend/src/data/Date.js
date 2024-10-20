@@ -5,6 +5,7 @@ const Date = () => {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState({});
   const [page, setPage] = useState(1);
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   // Функция для создания URL с фильтрами
   const buildUrlWithParams = (baseUrl, filters) => {
@@ -51,6 +52,7 @@ const Date = () => {
     setFilter,
     page,
     setPage,
+    userMenuOpen, setUserMenuOpen
   };
 };
 

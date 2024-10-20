@@ -14,7 +14,7 @@ import Account from './auth/account.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
-const Header = ({ filter, setFilter }) => {
+const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
 
     const bicyclesRef = useRef()
     const sparePartsRef = useRef()
@@ -24,7 +24,6 @@ const Header = ({ filter, setFilter }) => {
 
     const [searchOpen, setSearchOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
-    const [userMenuOpen, setUserMenuOpen] = useState(false)
     const [is_user_authorization, set_user_authorization] = useState(false)
 
     const isActive = (ref = bicyclesRef) => {

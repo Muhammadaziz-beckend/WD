@@ -6,7 +6,7 @@ import NavBar from './components/navBar.jsx';
 import Main from './main/main.jsx';
 import Date from './data/Date.js'
 import ProductDetail from './components/productDetail.jsx';
-
+import MainAuth from './components/auth/workspace/main.jsx'
 
 
 
@@ -18,6 +18,7 @@ const App = () => {
     setFilter,
     page,
     setPage,
+    userMenuOpen, setUserMenuOpen
   } = Date()
 
   return (
@@ -29,6 +30,8 @@ const App = () => {
             <Header
               filter={filter}
               setFilter={setFilter}
+              userMenuOpen={userMenuOpen}
+              setUserMenuOpen={setUserMenuOpen}
             />
             <NavBar />
             <Main
@@ -47,10 +50,15 @@ const App = () => {
             <Header
               filter={filter}
               setFilter={setFilter}
+              userMenuOpen={userMenuOpen}
+              setUserMenuOpen={setUserMenuOpen}
             />
-            <ProductDetail />
+            <ProductDetail userMenuOpen={userMenuOpen}
+              setUserMenuOpen={setUserMenuOpen} />
           </>
         } />
+
+        <Route path='/auth/*' element={<MainAuth />} />
 
       </Routes>
     </Router>
