@@ -134,7 +134,21 @@ class WishlistListView(generics.ListAPIView):
     def get_queryset(self):
         return Wishlist.objects.filter(user=self.request.user)
 
+class WishlistDeleteView(generics.DestroyAPIView):
+    serializer_class = WishlistSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Wishlist.objects.filter(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        item_id = self.kwargs.get('pk') 
+        try:
+            wishlist_item = self.get_queryset().get(id=item_id)
+            wishlist_item.delete()
+            return Response({"detail": "Элемент успешно удален из списка желаемого."}, status=status.HTTP_204_NO_CONTENT)
+        except Wishlist.DoesNotExist:
+            return Response({"detail": "Элемент не найден в вашем списке."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class UserProfileUpdateView(generics.UpdateAPIView):

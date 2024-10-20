@@ -10,5 +10,6 @@ urlpatterns = [
     path('order/history/', views.OrderHistoryView.as_view({'get': 'list'}), name='order-history'),
     path('wishlist/', views.WishlistListView.as_view(), name='wishlist-list'),
     path('wishlist/add/', views.WishlistCreateView.as_view(), name='wishlist-add'),
+    path('wishlist/delete/<int:pk>/', views.WishlistDeleteView.as_view(), name='wishlist-delete'),
     path('profile/update/', views.UserProfileUpdateView.as_view(), name='profile-update'),
 ]
