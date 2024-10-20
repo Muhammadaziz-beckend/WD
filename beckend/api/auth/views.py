@@ -96,12 +96,9 @@ class LogoutApiView(GenericAPIView):
             return None 
         return super().get_serializer_class()
 
-class OrderCreateView(UltraModelMixin, GenericAPIView):
+class OrderCreateView(generics.CreateAPIView):
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         bike = serializer.validated_data['bike']
@@ -110,9 +107,9 @@ class OrderCreateView(UltraModelMixin, GenericAPIView):
 
         serializer.save(user=self.request.user, price=price, status=Order.PENDING)
 
-class OrderHistoryView(UltraModelMixin, GenericAPIView):
+class OrderHistoryView(generics.ListAPIView):
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).order_by('-order_date')
