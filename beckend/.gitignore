@@ -14,5 +14,7 @@ venv/
 # Django migrations
 # migrations/
 
+*.sqlite3
+
 # Логи
-*.log
+*.logbeckend/db.sqlite3

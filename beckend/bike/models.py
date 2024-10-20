@@ -65,6 +65,8 @@ class Flag(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+from django.conf import settings
+
 class Order(models.Model):
     PENDING = 'pending'
     COMPLETED = 'completed'
@@ -75,13 +77,13 @@ class Order(models.Model):
         (COMPLETED, 'Completed'),
         (CANCELLED, 'Cancelled'),
     )
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь')
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь')  
     bike = models.ForeignKey('bike.Bike', on_delete=models.CASCADE, verbose_name='велосипед')
     quantity = models.PositiveIntegerField('количество', default=1)
-    price = models.DecimalField('цена', max_digits=10, decimal_places=2)  # Store the price at the time of order
+    price = models.DecimalField('цена', max_digits=10, decimal_places=2)
     status = models.CharField('статус заказа', max_length=20, choices=ORDER_STATUS, default=PENDING)
-    order_date = models.DateTimeField('дата заказа', default=timezone.now)
+    order_date = models.DateTimeField('дата заказа', auto_now_add=True)
 
     def __str__(self):
         return f'Order #{self.id} by {self.user} for {self.bike.name}'

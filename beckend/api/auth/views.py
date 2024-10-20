@@ -8,6 +8,7 @@ from rest_framework.generics import GenericAPIView,UpdateAPIView
 from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, ProfileSerializer, RegisterSerializer, UserProfileSerializer
 from account.models import User
 from rest_framework import generics, permissions
+from rest_framework import viewsets
 
 from api.mixins import UltraModelMixin
 from api.serializers import OrderSerializer, WishlistSerializer
@@ -96,12 +97,9 @@ class LogoutApiView(GenericAPIView):
             return None 
         return super().get_serializer_class()
 
-class OrderCreateView(UltraModelMixin, GenericAPIView):
+class OrderCreateView(generics.CreateAPIView):
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         bike = serializer.validated_data['bike']
@@ -110,9 +108,9 @@ class OrderCreateView(UltraModelMixin, GenericAPIView):
 
         serializer.save(user=self.request.user, price=price, status=Order.PENDING)
 
-class OrderHistoryView(UltraModelMixin, GenericAPIView):
+class OrderHistoryView(generics.ListAPIView):
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).order_by('-order_date')
@@ -134,9 +132,30 @@ class WishlistListView(generics.ListAPIView):
     def get_queryset(self):
         return Wishlist.objects.filter(user=self.request.user)
 
+class WishlistDeleteView(generics.DestroyAPIView):
+    serializer_class = WishlistSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Wishlist.objects.filter(user=self.request.user)
 
+    def delete(self, request, *args, **kwargs):
+        item_id = self.kwargs.get('pk') 
+        try:
+            wishlist_item = self.get_queryset().get(id=item_id)
+            wishlist_item.delete()
+            return Response({"detail": "Элемент успешно удален из списка желаемого."}, status=status.HTTP_204_NO_CONTENT)
+        except Wishlist.DoesNotExist:
+            return Response({"detail": "Элемент не найден в вашем списке."}, status=status.HTTP_404_NOT_FOUND)
 
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
 class UserProfileUpdateView(generics.UpdateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
