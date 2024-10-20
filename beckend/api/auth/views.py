@@ -8,6 +8,7 @@ from rest_framework.generics import GenericAPIView,UpdateAPIView
 from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, ProfileSerializer, RegisterSerializer, UserProfileSerializer
 from account.models import User
 from rest_framework import generics, permissions
+from rest_framework import viewsets
 
 from api.mixins import UltraModelMixin
 from api.serializers import OrderSerializer, WishlistSerializer
@@ -147,7 +148,14 @@ class WishlistDeleteView(generics.DestroyAPIView):
         except Wishlist.DoesNotExist:
             return Response({"detail": "Элемент не найден в вашем списке."}, status=status.HTTP_404_NOT_FOUND)
 
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
 class UserProfileUpdateView(generics.UpdateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
