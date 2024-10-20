@@ -2,7 +2,7 @@ import Left from './components/left.jsx'
 import Profile from './components/profile.jsx'
 
 
-const AuthProfile = ({component}) => {
+const AuthProfile = ({component , userMenuOpen, setUserMenuOpen }) => {
 
     return (
         <>

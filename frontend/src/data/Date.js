@@ -32,7 +32,6 @@ const Date = () => {
   useEffect(() => {
     const fetchData = async () => {
       const apiUrl = buildUrlWithParams(`http://127.0.0.1:8000/api/v1/products/?page=${page}`, filter);
-      console.log(apiUrl);
       
       const result = await Get(apiUrl); // Предполагаем, что Get возвращает данные с API
       setProducts(result); // Обновляем продукты новыми данными
@@ -42,7 +41,6 @@ const Date = () => {
 
   }, [filter, page]);  // Следим за изменениями фильтра и страницы
 
-  console.log(filter);
   
 
   return {

@@ -53,7 +53,7 @@ const Left = () => {
                                     Смена пароля
                                 </NavLink>
                                 <NavLink
-                                    to="/auth/"
+                                    to="/auth/wishlist"
                                     className={activeLink === 'wishlist' ? 'activeLink' : ''}
                                     onClick={() => handleSetActive('wishlist')}
                                 >

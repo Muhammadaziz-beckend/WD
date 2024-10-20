@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router-dom"
 
 import Get from "../request/get"
 import Post from "../request/post"
+import Delete from "../request/delete"
 
 const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
     const navigate = useNavigate()
@@ -13,15 +14,75 @@ const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
     const [active, setActive] = useState(false)
     const [nameFlag, setNameFlg] = useState('')
 
+    const [dataWishlist, setDataWishlist] = useState([])
+
+    const user = JSON.parse(localStorage.getItem('infoUserBike'))
+
+    const getWishlist = () => {
+        console.log(dataWishlist);
+        
+        if (user) {
+            Get('http://127.0.0.1:8000/api/v1/auth/wishlist/', user?.token).then(r => {
+                setDataWishlist(r?.data)
+
+                r?.data?.some(item => {
+                    if (item?.bike == id) {
+                        setActive(true);
+                    }
+                });
+
+            })
+        }
+    }
+
+    const setWishlist = () => {
+        let [idWishlist] = dataWishlist.map(item => {
+            if (item?.bike == id) {
+                return item?.id
+            }
+        }).filter(item => item);
+
+        if (user) {
+            if (!active) {
+                // Добавляем в список
+                let addWishlist = {
+                    user: Number(user?.id),
+                    bike: id,
+                };
+                Post('http://127.0.0.1:8000/api/v1/auth/wishlist/add/', addWishlist, user?.token).then(() => {
+                    getWishlist(); // обновляем список
+                    setActive(!active)
+                });
+            } else if (active && idWishlist) {
+                // Удаляем из списка
+                Delete(`http://127.0.0.1:8000/api/v1/auth/wishlist/delete/${idWishlist}/`, user?.token).then(() => {
+                    getWishlist(); // обновляем список
+                    setActive(!active)
+                });
+            }
+        } else {
+            setUserMenuOpen(!userMenuOpen);
+        }
+    };
+
+
     useEffect(() => {
+
+        Get(`http://127.0.0.1:8000/api/v1/flag/${date?.flag?.id}/`).then(re => {
+            setNameFlg(re?.data?.name)
+        })
+        getWishlist();getWishlist();
+    }, [date])
+
+
+    useEffect(() => {
+
         Get(`http://127.0.0.1:8000/api/v1/products/${id}/`).then(r => {
             setDate(r?.data)
+
         })
 
-        Get(`http://127.0.0.1:8000/api/v1/flag/${date?.flag}/`).then(r => {
-            setNameFlg(r?.data?.name)
-        })
-    }, [])
+    }, [id])
 
     const addHistory = () => {
         // Получаем информацию о пользователе
@@ -123,6 +184,7 @@ const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
 
                                         <button className={`featured ${active ? 'featured_active' : ''}`} onClick={() => {
                                             setActive(!active)
+                                            setWishlist()
                                         }}>
                                             <svg width="28.750000" height="25.357056" viewBox="0 0 28.75 25.3571">
                                                 <desc>

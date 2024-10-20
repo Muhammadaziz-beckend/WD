@@ -58,7 +58,13 @@ const App = () => {
           </>
         } />
 
-        <Route path='/auth/*' element={<MainAuth />} />
+        <Route path='/auth/*' element={
+          <MainAuth
+          
+            userMenuOpen={userMenuOpen}
+            setUserMenuOpen={setUserMenuOpen}
+          />
+        } />
 
       </Routes>
     </Router>

@@ -1,9 +1,11 @@
 import PaginationRounded from './paginator'
-
+import { useEffect, useState } from "react"
 import Mouth from '../static/img/mouth.svg'
 import Filter_icon from '../static/img/filter_icon.svg'
 
 import { NavLink } from 'react-router-dom'
+
+import Get from "../request/get.jsx";
 
 const ProductMain = (
     {
@@ -21,6 +23,7 @@ const ProductMain = (
     const scrollToSection = () => {
         productRef.current.scrollIntoView({ behavior: 'smooth' });
     };
+    
 
     return (
         <>

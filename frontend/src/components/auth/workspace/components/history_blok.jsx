@@ -22,9 +22,6 @@ const History_blok = ({ date }) => {
 
     }, [date])
 
-    console.log(dike);
-
-
 
     return (
 

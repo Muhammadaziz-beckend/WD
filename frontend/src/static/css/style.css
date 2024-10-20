@@ -75,6 +75,14 @@ body {
                         li.active {
                             color: var(--orange);
                         }
+
+                        a {
+                            color: var(--white);
+                        }
+
+                        a.active {
+                            color: var(--orange);
+                        }
                     }
                 }
 
@@ -98,6 +106,22 @@ body {
 
                         li.search {
                             position: relative;
+                        }
+
+                        a {
+                            position: relative;
+
+                            .blok_signal_wishlist {
+                                position: absolute;
+                                top: -1px;
+                                right: 0px;
+
+                                width: 6px;
+                                height: 6px;
+
+                                border-radius: 50%;
+                                background-color: var(--orange);
+                            }
                         }
 
                         .blok_search {
@@ -2362,6 +2386,195 @@ a {
                                 }
                             }
                         }
+
+                        .blok_wishlists {
+
+                            position: relative;
+
+                            display: grid;
+                            grid-template-columns: repeat(2, 1fr);
+                            grid-gap: 20px;
+                            padding: 20px;
+
+                            .null_wishlist_img {
+                                /* position: absolute;
+                                top: -50%;
+                                left: 0%;
+                                transform: translate(50%, 50%); */
+
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+
+                                width: 370px;
+
+                                p {
+
+                                    margin-top: 41px;
+
+                                    color: rgb(179, 179, 179);
+                                    font-family: var(--Inter);
+                                    font-size: 16px;
+                                    font-weight: 300;
+                                    line-height: 160%;
+                                    letter-spacing: 0%;
+                                    text-align: left;
+                                }
+                            }
+
+                            .blok_product_wishlist {
+
+                                transition: all .5s ease;
+
+                                position: relative;
+
+                                display: flex;
+                                flex-direction: column;
+
+                                padding: 10px;
+                                text-align: center;
+
+                                max-width: 300px;
+                                min-width: 290px;
+
+                                padding: 16px 19px 22px;
+
+                                .top {
+
+                                    position: relative;
+
+                                    .flag {
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 0px;
+
+                                        width: 72px;
+                                        height: 38px;
+
+                                        border-radius: 0px 0px 10px 0px;
+                                    }
+
+                                    .info_product {
+                                        position: absolute;
+                                        top: 0px;
+                                        right: 0px;
+
+                                        color: rgb(77, 147, 44);
+                                        font-family: var(--Inter);
+                                        font-size: 16px;
+                                        font-weight: 400;
+                                        line-height: 160%;
+                                        text-align: right;
+                                    }
+
+                                    .product_img {
+                                        object-fit: cover;
+
+                                        width: 255px;
+                                        height: 225px;
+                                    }
+                                }
+
+                                .bottom {
+                                    .info_prise_and_name {
+
+                                        display: flex;
+                                        flex-direction: column;
+                                        gap: 16px;
+
+                                        font-family: var(--Inter);
+                                        text-align: left;
+
+                                        p {
+                                            color: var(--black);
+                                            font-size: 18px;
+                                            font-weight: 300;
+                                            line-height: 160%;
+                                            letter-spacing: 1%;
+
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+
+                                        span {
+                                            color: rgb(119, 119, 119);
+                                            font-size: 16px;
+                                            font-weight: 500;
+                                            line-height: 123%;
+                                            letter-spacing: 0%;
+                                        }
+                                    }
+
+                                    .bey_product {
+
+                                        margin-top: 25px;
+
+                                        width: 100%;
+
+                                        transition: all .5s ease;
+                                        transform: scale(0);
+
+                                        position: absolute;
+                                        bottom: -50px;
+                                        left: 0px;
+                                        z-index: 1;
+
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+
+                                        padding: 16px 0px;
+                                        cursor: pointer;
+
+                                        border: none;
+                                        border-radius: 10px;
+                                        background: rgb(245, 117, 32);
+
+                                        .blok_button {
+
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+
+                                            img {
+
+                                                width: 25px;
+                                                height: 25px;
+                                            }
+
+                                            span {
+
+                                                color: var(--white);
+                                                font-family: var(--Inter);
+                                                font-size: 16px;
+                                                font-weight: 500;
+                                                line-height: 123%;
+                                                letter-spacing: 0%;
+                                                text-align: center;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            .blok_product_wishlist:hover {
+                                transition: all .5s ease;
+
+                                border-radius: 10px;
+                                box-shadow: 0px 0px 0px 0px rgba(186, 186, 186, 0.1), 2px 9px 21px 0px rgba(186, 186, 186, 0.1), 6px 38px 38px 0px rgba(186, 186, 186, 0.09), 14px 84px 51px 0px rgba(186, 186, 186, 0.05), 25px 150px 61px 0px rgba(186, 186, 186, 0.01), 39px 235px 67px 0px rgba(186, 186, 186, 0);
+                                background: rgb(255, 255, 255);
+                            }
+
+                            .blok_product_wishlist:hover .bey_product {
+                                transform: scale(1);
+
+                                position: absolute;
+                                bottom: -50px;
+                                left: 0px;
+                                z-index: 1;
+                            }
+                        }
                     }
                 }
             }
@@ -2405,6 +2618,15 @@ p.error {
                                     }
 
                                 }
+                            }
+
+                            .blok_wishlists {
+
+                                display: grid;
+                                padding: 20px;
+                                grid-gap: 20px;
+                                justify-items: center;
+                                grid-template-columns: repeat(1, 1fr);
                             }
                         }
                     }

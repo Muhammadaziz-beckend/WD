@@ -15,13 +15,13 @@ const PaginationRounded = (
   };
 
 
-  console.log(
-    {
-      page,
-      setPage,
-      count
-    }
-  );
+  // console.log(
+  //   {
+  //     page,
+  //     setPage,
+  //     count
+  //   }
+  // );
 
 
   return (

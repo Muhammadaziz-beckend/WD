@@ -13,6 +13,7 @@ import Account from './auth/account.jsx'
 
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import Get from '../request/get.jsx'
 
 const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
 
@@ -25,6 +26,8 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
     const [searchOpen, setSearchOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const [is_user_authorization, set_user_authorization] = useState(false)
+
+    const [wishlist, setWishlist] = useState(false)
 
     const isActive = (ref = bicyclesRef) => {
 
@@ -40,7 +43,22 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
     useEffect(() => {
         bicyclesRef.current.className = `active`
         set_user_authorization(Boolean(localStorage.getItem('infoUserBike')))
-    }, [])
+
+        const user = JSON.parse(localStorage.getItem('infoUserBike'))
+
+        if (user) {
+            Get('http://127.0.0.1:8000/api/v1/auth/wishlist/', user?.token)
+                .then(r => {
+                    console.log("Response from server:", r);
+                    setWishlist(Boolean(r?.data?.length));
+                })
+                .catch(error => {
+                    console.error("Error fetching wishlist:", error);
+                });
+
+        }
+    }, [])  // пустой массив для выполнения только один раз
+
 
     const headerSubmit = (
         event
@@ -52,6 +70,9 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
 
         setFilter({ ...filter, ...value });
     }
+
+
+
 
     return (
         <>
@@ -69,7 +90,7 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
                         <div className="blok_access">
                             <div className="menu">
                                 <ul>
-                                    <li onClick={() => isActive(bicyclesRef)} ref={bicyclesRef}>Велосипеды</li>
+                                    <NavLink to='/' onClick={() => isActive(bicyclesRef)} ref={bicyclesRef}>Велосипеды</NavLink>
                                     <li onClick={() => isActive(sparePartsRef)} ref={sparePartsRef}>Запчасти</li>
                                     <li onClick={() => isActive(equipmentRef)} ref={equipmentRef}>Экипировка</li>
                                     <li onClick={() => isActive(accessoriesRef)} ref={accessoriesRef}>Аксессуары</li>
@@ -94,7 +115,12 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
                                         </form>
                                     </div>
                                     <li onClick={() => setUserMenuOpen(!userMenuOpen)}><img src={user} /></li>
-                                    <li><img src={favorites} /></li>
+                                    <NavLink to='/auth/wishlist'>
+
+                                        {wishlist && <div className="blok_signal_wishlist"></div>}
+
+
+                                        <img src={favorites} /></NavLink>
                                     <li><img src={chick} /></li>
                                 </ul>
 

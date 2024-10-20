@@ -15,7 +15,7 @@ const Account = () => {
                 <NavLink to='/auth/history'>История заказов</NavLink>
                 <NavLink to='/auth/info-user'>Персональные данные</NavLink>
                 <NavLink to='/auth/change-password'>Смена пароля</NavLink>
-                <NavLink to='/auth/wish-list'>Список желаний</NavLink>
+                <NavLink to='/auth/wishlist'>Список желаний</NavLink>
                 <NavLink to='/auth/logout'>Выйти</NavLink>
             </div>
         </div>

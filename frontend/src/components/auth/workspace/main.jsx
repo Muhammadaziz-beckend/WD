@@ -4,21 +4,21 @@ import AuthProfile from './auth';
 import ChanPassword from './components/chanPassword';
 import History from './components/history';
 import { useEffect } from 'react';
+import Wishlist from './components/wishlist';
 
 
 
 
-const MainAuth = () => {
+const MainAuth = ({ userMenuOpen, setUserMenuOpen }) => {
 
     let navigate = useNavigate()
 
     useEffect(() => {
         const userData = localStorage.getItem('infoUserBike');
-        
+
         if (userData) {
             try {
-                const { token } = JSON.parse(userData);  // Если данные есть, распарсим и извлечем token
-                // Работайте с токеном здесь
+                const { token } = JSON.parse(userData);
             } catch (error) {
                 console.error("Ошибка при парсинге JSON:", error);
             }
@@ -30,7 +30,8 @@ const MainAuth = () => {
 
     return (
         <>
-            <Header />
+            <Header userMenuOpen={userMenuOpen}
+                setUserMenuOpen={setUserMenuOpen} />
 
             <main className="main">
                 <div className="container">
@@ -40,6 +41,8 @@ const MainAuth = () => {
                             <Route path='/' element={<AuthProfile />} />
                             <Route path='/chang-password' element={<AuthProfile component={<ChanPassword />} />} />
                             <Route path='/history' element={<AuthProfile component={<History />} />} />
+                            <Route path='/wishlist' element={<AuthProfile component={<Wishlist userMenuOpen={userMenuOpen}
+                                setUserMenuOpen={setUserMenuOpen} />} />} />
                         </Routes>
                     </div>
                 </div>
