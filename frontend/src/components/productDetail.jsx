@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { NavLink, useNavigate, useParams } from "react-router-dom"
 
 import Get from "../request/get"
@@ -9,6 +9,8 @@ const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
     const navigate = useNavigate()
     const { id } = useParams()
 
+    const blokItemRef = useRef()
+
     const [date, setDate] = useState({})
     const [count, setCount] = useState(1)
     const [active, setActive] = useState(false)
@@ -17,6 +19,10 @@ const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
     const [dataWishlist, setDataWishlist] = useState([])
 
     const user = JSON.parse(localStorage.getItem('infoUserBike'))
+
+    useEffect(() => {
+        blokItemRef.current.scrollIntoView({ behavior: 'smooth' });
+    },[navigate])
 
     const getWishlist = () => {
         console.log(dataWishlist);
@@ -128,9 +134,9 @@ const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
     return (
 
         <>
-            <div className="detail_item">
+            <div className="detail_item" ref={blokItemRef}>
                 <div className="container">
-                    <div className="blok_items">
+                    <div className="blok_items" >
 
                         <div className="blok_image_and_title">
                             <div className="name_product">

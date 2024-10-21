@@ -1,0 +1,18 @@
+
+.header_blok {
+
+}
+
+.header_flex {
+    position: fixed;
+    top: 0px;
+
+    z-index: 2;
+
+    transition: all .5s ease;
+
+    background: rgb(16 16 16 / 95%);
+    color: white;
+    transition: all 0.7s ease;
+    box-shadow: 0px 0px 20px 9px black;
+}

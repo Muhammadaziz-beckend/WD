@@ -81,3 +81,13 @@
     }
 }
 
+.basket_h2 {
+    
+    color: rgb(16, 16, 16);
+    font-family: var(--Inter);
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 123%;
+    letter-spacing: 5%;
+    text-align: left;
+}

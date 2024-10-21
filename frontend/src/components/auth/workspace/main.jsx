@@ -5,6 +5,7 @@ import ChanPassword from './components/chanPassword';
 import History from './components/history';
 import { useEffect } from 'react';
 import Wishlist from './components/wishlist';
+import Basket from './components/basket';
 
 
 
@@ -15,6 +16,8 @@ const MainAuth = ({ userMenuOpen, setUserMenuOpen }) => {
 
     useEffect(() => {
         const userData = localStorage.getItem('infoUserBike');
+
+        setUserMenuOpen(false)
 
         if (userData) {
             try {
@@ -27,6 +30,7 @@ const MainAuth = ({ userMenuOpen, setUserMenuOpen }) => {
         }
     }, [navigate]);
 
+    
 
     return (
         <>
@@ -41,8 +45,8 @@ const MainAuth = ({ userMenuOpen, setUserMenuOpen }) => {
                             <Route path='/' element={<AuthProfile />} />
                             <Route path='/chang-password' element={<AuthProfile component={<ChanPassword />} />} />
                             <Route path='/history' element={<AuthProfile component={<History />} />} />
-                            <Route path='/wishlist' element={<AuthProfile component={<Wishlist userMenuOpen={userMenuOpen}
-                                setUserMenuOpen={setUserMenuOpen} />} />} />
+                            <Route path='/wishlist' element={<AuthProfile component={<Wishlist userMenuOpen={userMenuOpen} setUserMenuOpen={setUserMenuOpen} />} />} />
+                            <Route path='/basket' element={<Basket/>} />
                         </Routes>
                     </div>
                 </div>

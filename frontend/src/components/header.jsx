@@ -7,9 +7,12 @@ import chick from './../static/img/chick.svg'
 import burgerMenu from './../static/img/burgerMenu.svg'
 import close from '../static/img/close.svg'
 
+import '../static/css/header.css'
+
 import Menu from './select'
 import Login from "./auth/login.jsx";
 import Account from './auth/account.jsx'
+
 
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
@@ -26,6 +29,7 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
     const [searchOpen, setSearchOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const [is_user_authorization, set_user_authorization] = useState(false)
+    const [isSticky, setIsSticky] = useState(false);
 
     const [wishlist, setWishlist] = useState(false)
 
@@ -57,6 +61,23 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
                 });
 
         }
+
+        const handleScroll = () => {
+            // Если прокрутили больше чем на 150 пикселей, делаем шапку "залипающей"
+            if (window.scrollY > 75) {
+                setIsSticky(true);
+            } else {
+                setIsSticky(false);
+            }
+        };
+
+        // Добавляем обработчик на событие прокрутки
+        window.addEventListener('scroll', handleScroll);
+
+        // Убираем обработчик, когда компонент размонтируется
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, [])  // пустой массив для выполнения только один раз
 
 
@@ -76,7 +97,7 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
 
     return (
         <>
-            <header className="header">
+            <header className={`header ${isSticky ? 'header_flex' : 'header_blok'} `}>
 
                 <div className="container">
 
@@ -121,7 +142,7 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
 
 
                                         <img src={favorites} /></NavLink>
-                                    <li><img src={chick} /></li>
+                                    <NavLink to='/auth/basket'><img src={chick} /></NavLink>
                                 </ul>
 
                                 <ul>
@@ -137,7 +158,7 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
                                 </div>
 
                                 {
-                                    is_user_authorization ? <Account /> : <Login />
+                                    is_user_authorization ? <Account userMenuOpen={userMenuOpen} setUserMenuOpen={setUserMenuOpen} /> : <Login />
                                 }
 
                             </div>
