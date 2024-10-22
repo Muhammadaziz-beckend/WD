@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
@@ -9,11 +10,12 @@ from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, Prof
 from account.models import User
 from rest_framework import generics, permissions
 from rest_framework import viewsets
-
+from django.utils import timezone
 from api.mixins import UltraModelMixin
-from api.serializers import OrderSerializer, WishlistSerializer
-from bike.models import Order, Wishlist
+from api.serializers import OrderSerializer, WishlistSerializer, CartItemSerializer, CartSerializer
+from bike.models import Bike, Cart, CartItem, Order, Wishlist
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
 
 class LoginApiViews(GenericAPIView):
     serializer_class = [LoginSerializer, ProfileSerializer]
@@ -97,49 +99,71 @@ class LogoutApiView(GenericAPIView):
             return None 
         return super().get_serializer_class()
 
-class OrderCreateView(generics.CreateAPIView):
+class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         bike = serializer.validated_data['bike']
         quantity = serializer.validated_data['quantity']
         price = bike.price  
-
         serializer.save(user=self.request.user, price=price, status=Order.PENDING)
 
-class OrderHistoryView(generics.ListAPIView):
-    serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+class CartListView(generics.ListAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).order_by('-order_date')
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        queryset = super().get_queryset()
+        cart_id = self.request.query_params.get('cart', None)
+        if cart_id:
+            queryset = queryset.filter(id=cart_id)
+        return queryset
     
-class WishlistCreateView(generics.CreateAPIView):
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class CartItemCreateView(generics.CreateAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        cart, created = Cart.objects.get_or_create(user=self.request.user)
+        serializer.save(cart=cart)
+
+class CartItemUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart__user=self.request.user)
+
+class WishlistViewSet(viewsets.ModelViewSet):
     serializer_class = WishlistSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Wishlist.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class WishlistListView(generics.ListAPIView):
-    serializer_class = WishlistSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Wishlist.objects.filter(user=self.request.user)
-
-class WishlistDeleteView(generics.DestroyAPIView):
-    serializer_class = WishlistSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Wishlist.objects.filter(user=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         item_id = self.kwargs.get('pk') 
         try:
             wishlist_item = self.get_queryset().get(id=item_id)
@@ -148,14 +172,6 @@ class WishlistDeleteView(generics.DestroyAPIView):
         except Wishlist.DoesNotExist:
             return Response({"detail": "Элемент не найден в вашем списке."}, status=status.HTTP_404_NOT_FOUND)
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-        
 class UserProfileUpdateView(generics.UpdateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]

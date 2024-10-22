@@ -35,7 +35,7 @@ class User(AbstractUser):
     street = models.CharField('Улица',max_length=100,null=False, default='Unknown')
     house = models.CharField('Дом',max_length=10,null=False, default='Unknown')
     floor = models.CharField('Этаж',max_length=10,null=False, default='Unknown')
-    apartment = models.CharField('квартира',max_length=10,null=False, default='Unknown')
+    apartment = models.CharField('квартира', max_length=10, null=False, default='Unknown')
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -63,7 +63,7 @@ class ListCreateBikeApiView(UltraGenericAPIView):
         bikes = self.filter_queryset(self.get_queryset())
         bikes = self.paginate_queryset(bikes)
 
-        # clone_bike(50)
+        clone_bike(5)
 
         serializer = self.get_serializer(bikes, many=True)
         return self.get_paginated_response(serializer.data)

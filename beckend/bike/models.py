@@ -105,6 +105,24 @@ class Wishlist(models.Model):
     def __str__(self):
         return f'{self.user.username} - {self.bike.name}'
     
+
+class Cart(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart')
+    created_at = models.DateTimeField(default=timezone.now, blank=True, null=True)
+
+    def __str__(self):
+        return f"Корзина {self.user}"
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    bike = models.ForeignKey('bike.Bike', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2) 
+
+    @property
+    def total_price(self):
+        return self.price * self.quantity
+    
 class Bike(models.Model):
     IN_STOCK = 'in_stock'
     SOLD_OUT = 'sold_out'
