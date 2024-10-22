@@ -214,13 +214,8 @@ AZZMIN_SETTINGS = {
     ############
     # Ссылки для размещения в верхнем меню
     "topmenu_links": [
-        # URL-адрес, который становится обратным (можно добавить разрешения)
         {"name": "Главная", "url": "admin:index", "permissions": ["auth.view_user"]},
-        # внешний URL, который открывается в новом окне (можно добавить разрешения)
-        # {"name": "Jazzmin", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
         {"name": "Rest API", "url": "/api/v1/swagger/", "new_window": True},
-        # Приложение с выпадающим меню для всех страниц своих моделей (разрешения проверены для моделей)
-        # {"app": "books"},
     ],
     #############
     # Меню пользователя#
