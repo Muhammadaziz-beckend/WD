@@ -116,15 +116,21 @@ class CartListView(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        total_price = sum(int(cart_item.price * cart_item.quantity) for cart in queryset for cart_item in cart.items.all())
 
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            return self.get_paginated_response({
+                'carts': serializer.data,
+                'total_price': total_price,
+            })
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
+        return Response({
+            'carts': serializer.data,
+            'total_price': total_price,
+        })
 
 class CartItemCreateView(generics.CreateAPIView):
     queryset = CartItem.objects.all()
