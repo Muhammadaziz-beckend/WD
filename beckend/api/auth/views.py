@@ -82,9 +82,8 @@ class ChangePasswordView(GenericAPIView):
 
 from rest_framework.authtoken.models import Token
 
-class LogoutApiView(GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = None 
+class LogoutApiView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         try:
@@ -93,11 +92,6 @@ class LogoutApiView(GenericAPIView):
             return Response({"detail": "Вы успешно вышли из системы."}, status=status.HTTP_200_OK)
         except (AttributeError, Token.DoesNotExist):
             return Response({"detail": "Ошибка при выходе."}, status=status.HTTP_400_BAD_REQUEST)
-
-    def get_serializer_class(self):
-        if getattr(self, 'swagger_fake_view', False):
-            return None 
-        return super().get_serializer_class()
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
@@ -114,15 +108,11 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 class CartListView(generics.ListAPIView):
-    queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    permission_classes = [IsAuthenticated]  
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        cart_id = self.request.query_params.get('cart', None)
-        if cart_id:
-            queryset = queryset.filter(id=cart_id)
-        return queryset
+        return Cart.objects.filter(user=self.request.user)
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
