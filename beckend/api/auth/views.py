@@ -109,14 +109,14 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 class CartListView(generics.ListAPIView):
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Cart.objects.filter(user=self.request.user)
-    
+
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        total_price = sum(int(cart_item.price * cart_item.quantity) for cart in queryset for cart_item in cart.items.all())
+        total_price = sum(cart_item.quantity * int(cart_item.price) for cart in queryset for cart_item in cart.items.all())
 
         page = self.paginate_queryset(queryset)
         if page is not None:

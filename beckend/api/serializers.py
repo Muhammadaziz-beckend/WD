@@ -23,19 +23,25 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CartItemSerializer(serializers.ModelSerializer):
-    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    total_price = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = CartItem
         fields = ['id', 'bike', 'quantity', 'price', 'total_price']
 
+    def get_total_price(self, obj):
+        return int(obj.quantity) * int(obj.price)
+
+    def get_price(self, obj):
+        return int(obj.price)
+
 class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True, read_only=True)
-    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    items = CartItemSerializer(many=True)
 
     class Meta:
         model = Cart
-        fields = ['id', 'user', 'items', 'total_price']
+        fields = ['id', 'user', 'items']
 
 class FrameMaterialSerializer(serializers.ModelSerializer):
 
