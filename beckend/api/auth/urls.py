@@ -8,6 +8,7 @@ from .views import (
     LoginApiViews,
     LogoutApiView,
     OrderViewSet,
+    PurchaseView,
     RegisterApiView,
     WishlistViewSet,
     UserProfileUpdateView,
@@ -26,5 +27,6 @@ urlpatterns = [
     path('cart/item/<int:pk>/', CartItemUpdateDeleteView.as_view(), name='cart-item-update-delete'),
     path('logout/', LogoutApiView.as_view(), name='logout'),
     path('profile/update/', UserProfileUpdateView.as_view(), name='profile-update'),
+    path('purchase/', PurchaseView.as_view(), name='purchase'),
     path('', include(router.urls)), 
 ]

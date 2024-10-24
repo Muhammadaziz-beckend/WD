@@ -6,16 +6,18 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView,UpdateAPIView
-from api.auth.serializers import ChangePasswordSerializer, LoginSerializer, ProfileSerializer, RegisterSerializer, UserProfileSerializer
+from .serializers import ChangePasswordSerializer, LoginSerializer, ProfileSerializer, RegisterSerializer, UserProfileSerializer
 from account.models import User
 from rest_framework import generics, permissions
 from rest_framework import viewsets
 from django.utils import timezone
 from api.mixins import UltraModelMixin
-from api.serializers import OrderSerializer, WishlistSerializer, CartItemSerializer, CartSerializer
+from api.serializers import OrderSerializer, PurchaseSerializer, WishlistSerializer, CartItemSerializer, CartSerializer
 from bike.models import Bike, Cart, CartItem, Order, Wishlist
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
+from rest_framework import serializers
+from rest_framework.decorators import action
 
 class LoginApiViews(GenericAPIView):
     serializer_class = [LoginSerializer, ProfileSerializer]
@@ -87,11 +89,55 @@ class LogoutApiView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            token = request.auth  
-            token.delete() 
-            return Response({"detail": "Вы успешно вышли из системы."}, status=status.HTTP_200_OK)
-        except (AttributeError, Token.DoesNotExist):
+            token = request.auth
+            if token:
+                token.delete()  
+                return Response({"detail": "Вы успешно вышли из системы."}, status=status.HTTP_200_OK)
+            return Response({"detail": "Токен не найден."}, status=status.HTTP_400_BAD_REQUEST)
+        except (AttributeError, Token.DoesNotExist): 
             return Response({"detail": "Ошибка при выходе."}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, *args, **kwargs):
+        return Response({"detail": "Метод GET не поддерживается для выхода. Используйте POST."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class PurchaseView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PurchaseSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        try:
+            cart = Cart.objects.get(user=user)
+        except Cart.DoesNotExist:
+            return Response({"detail": "Корзина не найдена."}, status=status.HTTP_404_NOT_FOUND)
+
+        if not cart.items.exists():
+            return Response({"detail": "Корзина пуста."}, status=status.HTTP_400_BAD_REQUEST)
+
+        total_price = sum(cart_item.total_price for cart_item in cart.items.all())
+
+        orders = [
+            Order(
+                user=user,
+                bike=cart_item.bike,
+                quantity=cart_item.quantity,
+                price=cart_item.price,
+                status=Order.PENDING
+            )
+            for cart_item in cart.items.all()
+        ]
+        Order.objects.bulk_create(orders)
+
+        cart.items.all().delete()  
+
+        if total_price == total_price.to_integral_value():
+            total_price = int(total_price)
+
+        return Response({
+            "detail": "Покупка успешно завершена.",
+            "total_price": total_price
+        }, status=status.HTTP_200_OK)
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
@@ -105,6 +151,27 @@ class OrderViewSet(viewsets.ModelViewSet):
         quantity = serializer.validated_data['quantity']
         price = bike.price  
         serializer.save(user=self.request.user, price=price, status=Order.PENDING)
+
+    @action(detail=False, methods=['post'], url_path='checkout')
+    def checkout(self, request):
+        cart = Cart.objects.filter(user=request.user).first()
+
+        if not cart or not cart.items.exists():
+            return Response({'detail': 'Корзина пуста'}, status=status.HTTP_400_BAD_REQUEST)
+
+        for cart_item in cart.items.all():
+            Order.objects.create(
+                user=request.user,
+                bike=cart_item.bike,
+                quantity=cart_item.quantity,
+                price=cart_item.price,
+                status=Order.PENDING
+            )
+
+        cart.items.all().delete()
+
+        return Response({'detail': 'Покупка успешно завершена'}, status=status.HTTP_201_CREATED)
+
 
 
 class CartListView(generics.ListAPIView):
@@ -132,14 +199,25 @@ class CartListView(generics.ListAPIView):
             'total_price': total_price,
         })
 
+
 class CartItemCreateView(generics.CreateAPIView):
-    queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        cart, created = Cart.objects.get_or_create(user=self.request.user)
-        serializer.save(cart=cart)
+        user = self.request.user
+        cart, created = Cart.objects.get_or_create(user=user)
+
+        bike_id = self.request.data.get('bike_id')
+        quantity = self.request.data.get('quantity')
+
+        try:
+            bike = Bike.objects.get(id=bike_id)
+        except Bike.DoesNotExist:
+            raise serializers.ValidationError({"detail": "Велосипед не найден."})
+
+        serializer.save(cart=cart, bike=bike, quantity=int(quantity), price=bike.price)
+
 
 class CartItemUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CartItem.objects.all()

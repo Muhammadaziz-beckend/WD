@@ -118,10 +118,11 @@ class CartItem(models.Model):
     bike = models.ForeignKey('bike.Bike', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2) 
-    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+
     @property
     def total_price(self):
-        return self.price * self.quantity
+        return self.price * int(self.quantity) 
+
     
 class Bike(models.Model):
     IN_STOCK = 'in_stock'

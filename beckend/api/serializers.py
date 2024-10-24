@@ -18,23 +18,45 @@ class SizeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-class CartItemSerializer(serializers.ModelSerializer):
-    total_price = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
 
     class Meta:
-        model = CartItem
-        fields = ['id', 'bike', 'quantity', 'price', 'total_price']
-
-    def get_total_price(self, obj):
-        return int(obj.quantity) * int(obj.price)
+        model = Order
+        fields = ['id', 'quantity', 'price', 'status', 'order_date', 'user', 'bike']
 
     def get_price(self, obj):
         return int(obj.price)
+
+class PurchaseSerializer(serializers.Serializer):
+    bike_id = serializers.IntegerField()
+    quantity = serializers.IntegerField()
+
+    def validate_bike_id(self, value):
+        try:
+            bike = Bike.objects.get(id=value)
+        except Bike.DoesNotExist:
+            raise serializers.ValidationError("Велосипед с таким ID не найден.")
+        
+        if bike.receive_type != 'in_stock':
+            raise serializers.ValidationError("Этот велосипед недоступен для покупки.")
+        
+        return value
+
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Количество должно быть больше 0.")
+        return value
+
+class CartItemSerializer(serializers.ModelSerializer):
+    bike_id = serializers.IntegerField(write_only=True)  
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'bike_id', 'quantity', 'price', 'total_price']
+
+    def get_total_price(self, obj):
+        return float(obj.total_price)
+
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True)
