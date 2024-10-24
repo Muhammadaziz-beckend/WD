@@ -15,8 +15,7 @@ const Get = async (url,token=null) => {
         })
         return res
     } catch (e){
-        console.log(e);
-        
+        return (e);
     }
 }
 

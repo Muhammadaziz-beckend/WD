@@ -55,13 +55,13 @@ const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
                     user: Number(user?.id),
                     bike: id,
                 };
-                Post('http://127.0.0.1:8000/api/v1/auth/wishlist/add/', addWishlist, user?.token).then(() => {
+                Post('http://127.0.0.1:8000/api/v1/auth/wishlist/', addWishlist, user?.token).then(() => {
                     getWishlist(); // обновляем список
                     setActive(!active)
                 });
             } else if (active && idWishlist) {
                 // Удаляем из списка
-                Delete(`http://127.0.0.1:8000/api/v1/auth/wishlist/delete/${idWishlist}/`, user?.token).then(() => {
+                Delete(`http://127.0.0.1:8000/api/v1/auth/wishlist/${idWishlist}/`, user?.token).then(() => {
                     getWishlist(); // обновляем список
                     setActive(!active)
                 });
@@ -113,17 +113,15 @@ const ProductDetail = ({ userMenuOpen, setUserMenuOpen }) => {
         // Формируем объект заказа
         const dateOrder = {
             "quantity": count,
-            "price": Math.ceil(date?.price) * count,
             "status": "pending",
-            "order_date": new Date(),
             "user": user.id,
             "bike": id
         };
 
         // Отправляем запрос с использованием токена пользователя
-        Post('http://127.0.0.1:8000/api/v1/auth/order/create/', dateOrder, user.token)
+        Post('http://127.0.0.1:8000/api/v1/auth/orders/', dateOrder, user.token)
             .then(r => {
-                navigate('/auth/history');
+                navigate('/auth/basket');
             })
             .catch(error => {
                 console.error("Ошибка при создании заказа:", error);

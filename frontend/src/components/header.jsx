@@ -32,6 +32,7 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
     const [isSticky, setIsSticky] = useState(false);
 
     const [wishlist, setWishlist] = useState(false)
+    const [orders,setOrders] = useState(false)
 
     const isActive = (ref = bicyclesRef) => {
 
@@ -59,12 +60,19 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
                 .catch(error => {
                     console.error("Error fetching wishlist:", error);
                 });
-
+            
+                Get('http://127.0.0.1:8000/api/v1/auth/orders/',user?.token)
+                .then(
+                    r => {
+                        
+                        setOrders(Boolean(r?.data?.length))
+                    }
+                )
         }
 
         const handleScroll = () => {
             // Если прокрутили больше чем на 150 пикселей, делаем шапку "залипающей"
-            if (window.scrollY > 75) {
+            if (window.scrollY > 160) {
                 setIsSticky(true);
             } else {
                 setIsSticky(false);
@@ -142,7 +150,11 @@ const Header = ({ filter, setFilter, userMenuOpen, setUserMenuOpen }) => {
 
 
                                         <img src={favorites} /></NavLink>
-                                    <NavLink to='/auth/basket'><img src={chick} /></NavLink>
+                                    <NavLink to='/auth/basket'>
+                                        {orders && <div className="blok_signal_wishlist"></div>}
+
+                                        <img src={chick} />
+                                    </NavLink>
                                 </ul>
 
                                 <ul>

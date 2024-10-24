@@ -26,11 +26,12 @@ const MainAuth = ({ userMenuOpen, setUserMenuOpen }) => {
                 console.error("Ошибка при парсинге JSON:", error);
             }
         } else {
-            navigate('/');  // Если данных нет, перенаправляем на главную
+            setUserMenuOpen(!userMenuOpen)
+            // navigate('/');  // Если данных нет, перенаправляем на главную
         }
     }, [navigate]);
 
-    
+
 
     return (
         <>
@@ -46,7 +47,8 @@ const MainAuth = ({ userMenuOpen, setUserMenuOpen }) => {
                             <Route path='/chang-password' element={<AuthProfile component={<ChanPassword />} />} />
                             <Route path='/history' element={<AuthProfile component={<History />} />} />
                             <Route path='/wishlist' element={<AuthProfile component={<Wishlist userMenuOpen={userMenuOpen} setUserMenuOpen={setUserMenuOpen} />} />} />
-                            <Route path='/basket' element={<Basket/>} />
+                            <Route path='/basket' element={<Basket userMenuOpen={userMenuOpen}
+                                setUserMenuOpen={setUserMenuOpen} />} />
                         </Routes>
                     </div>
                 </div>
